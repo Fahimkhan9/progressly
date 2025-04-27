@@ -33,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ConvexClientProvider>
-          <div className="px-10">
+          <div className="px-5">
           <Navbar/>
         {children}
         <Footer/>
