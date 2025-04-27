@@ -4,12 +4,14 @@ import { useAuth, useUser } from '@clerk/nextjs'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Slide, toast, ToastContainer } from 'react-toastify';
 
 function Navbar() {
   const {isSignedIn,isLoaded,user}=useUser()
   const {signOut}=useAuth()
   console.log(user);
+  const [logoutloading,setLogoutLoading]=useState(false)
   const get=()=>{
     if(!isLoaded){
       return<span className="loading loading-dots loading-md"></span>
@@ -20,11 +22,25 @@ function Navbar() {
     const router=useRouter()
     const handlesignout=async()=>{
       try {
+        setLogoutLoading(true)
         await signOut()
+        toast.success('🦄 Wow so easy!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+          });
         router.push('/sign-in')
       } catch (error) {
         console.log(error);
         
+      }finally{
+        setLogoutLoading(false)
       }
     }
     return (
@@ -48,9 +64,22 @@ function Navbar() {
         </li>
         <li>Settings</li>
         <li onClick={()=>handlesignout()} >
-          <button className='btn bg-red-300'>Logout</button>
+          <button disabled={logoutloading} className='btn bg-red-300'>Logout</button>
         </li>
       </ul>
+      <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={false}
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="colored"
+transition={Slide}
+/>
     </div>
     )
   }
