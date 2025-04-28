@@ -20,7 +20,7 @@ function ProfileSidebar() {
                         {/* Sidebar content here */}
                         <li><a>Create a Team
                             </a></li>
-                        <li><a>Update Profile</a></li>
+                        <li><a> Profile</a></li>
                     </ul>
                 </div>
             </div>

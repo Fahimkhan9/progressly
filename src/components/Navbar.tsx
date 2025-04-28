@@ -17,7 +17,12 @@ function Navbar() {
       return<span className="loading loading-dots loading-md"></span>
     }
     if(!isSignedIn){
-      return <button className="btn">Signin</button>
+      return (
+        <>
+        <Link href={'/sign-in'}>
+        <button className="btn  btn-secondary">Sign in</button></Link>
+        </>
+      )
     }
     const router=useRouter()
     const handlesignout=async()=>{
@@ -86,7 +91,7 @@ transition={Slide}
   return (
     <div className="navbar  bg-base-300 shadow-sm">
   <div className="flex-1">
-    <a className="btn btn-ghost text-xl">daisyUI</a>
+    <Link href={'/'}><button className="btn btn-ghost text-xl">daisyUI</button></Link>
   </div>
   <div className="flex gap-2">
     <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
