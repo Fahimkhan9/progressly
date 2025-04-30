@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CiMenuBurger } from 'react-icons/ci'
 import TeamMemberSearch from './TeamMemberSearch'
 import { IoMdPersonAdd } from "react-icons/io";
@@ -17,9 +17,9 @@ type props={
     team:team,
     
 }
-function TeamModal({team,user}) {
+function TeamModal({team,user,members}) {
     const [allusers,setAllusers]=useState([])
-    console.log(allusers);
+    
     const [role,setRole]=useState('')
     const invitemember=async (item)=>{
         try {
@@ -50,6 +50,10 @@ function TeamModal({team,user}) {
             
         }
     }
+    
+    
+    console.log(members);
+    
   return (
     <dialog id="teammodal" className="modal">
   <div className="modal-box w-11/12 max-w-5xl">
@@ -69,13 +73,17 @@ function TeamModal({team,user}) {
       </tr>
     </thead>
     <tbody>
-     
-      <tr className="hover:bg-base-300">
+     {
+      members.length>0 && members.map(item=>(
+<tr key={item.id}  className="hover:bg-base-300">
       
-        <td>Hart Hagerty</td>
-        <td>User or Admin</td>
-        <td className='btn btn-secondary' ><CiMenuBurger/></td>
-      </tr>
+      <td>{item.firstName} {item.lastName}</td>
+      <td>User or Admin</td>
+      <td className='btn btn-secondary' ><CiMenuBurger/></td>
+    </tr>
+      ))
+     }
+      
    
     </tbody>
   </table>

@@ -15,6 +15,7 @@ function Page({params}) {
         
       }
      } catch (error) {
+      console.log(error);
       
      }
     })()

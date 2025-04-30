@@ -3,6 +3,7 @@ import ProfileSidebar from '@/components/ProfileSidebar'
 import TeamModal from '@/components/TeamModal';
 import { db, teamCollection } from '@/lib/firebase';
 import { useUser } from '@clerk/nextjs';
+import axios from 'axios';
 import { doc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { CiMenuKebab } from "react-icons/ci";
@@ -18,6 +19,7 @@ function Page() {
     const [teams,setTeams]=useState<team[]>([])
     const [selectedTeam,setSelectedTeam]=useState<team>()
     const [isLoading,setIsLoading]=useState(false)
+    const [members,setMembers]=useState([])
     const loadteam = async () => {
         
         
@@ -53,15 +55,32 @@ setIsLoading(false)
             setIsLoading(false)
         }
     }
+    
     useEffect(() => {
 loadteam()
     }, [])
-    
+    const loadteammembers=async(team_id)=>{
+                try {
+                    
+                    console.log(team_id);
+                    
+                    if(team_id){
+                      const data={team_id}
+                      const res=await axios.post('/api/users/getmembers',data)
+                      console.log(res);
+                      setMembers(res.data.response)
+                    }
+                } catch (error) {
+                    console.log(error);
+                    
+                }
+            }
     const handleteammodal=(id:string)=>{
         const selectteam=teams.filter(i=>i.id===id)
        
         
         setSelectedTeam(()=>selectteam[0])
+        loadteammembers(selectteam[0].id)
         document.getElementById('teammodal').showModal()
     }
     return (
@@ -103,6 +122,7 @@ loadteam()
      <TeamModal
      team={selectedTeam}
      user={user}
+     members={members[0]}
      />
     </tbody>
   </table>
