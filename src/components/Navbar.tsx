@@ -8,10 +8,11 @@ import React, { useEffect, useState } from 'react'
 import { Slide, toast, ToastContainer } from 'react-toastify';
 
 function Navbar() {
+  const [logoutloading,setLogoutLoading]=useState(false)
   const {isSignedIn,isLoaded,user}=useUser()
   const {signOut}=useAuth()
-  console.log(user);
-  const [logoutloading,setLogoutLoading]=useState(false)
+
+  
   const get=()=>{
     if(!isLoaded){
       return<span className="loading loading-dots loading-md"></span>

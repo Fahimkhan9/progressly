@@ -19,11 +19,13 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 const teamCollection = collection(db, "team");
-
-
+const invitationCollection=collection(db,'invitation')
+const teammemberCollection=collection(db,'teammember')
 export {
   app,
   db,
   storage,
-  teamCollection
+  teamCollection,
+  invitationCollection,
+  teammemberCollection
 };
