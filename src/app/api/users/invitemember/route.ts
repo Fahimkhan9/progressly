@@ -8,7 +8,7 @@ export async function POST(req:NextRequest) {
     try {
         const { email, userid, teamid,role } = await req.json();
         const token=generateJwtToken({email,userid})
-        if([email,userid,teamid,token].some(i=>i.trim()=='')){
+        if([email,userid,teamid,token,role].some(i=>i.trim()=='')){
             return NextResponse.json({msg:'All fields are required'})
         }
        const docref= await setDoc(doc(invitationCollection),{
@@ -17,7 +17,7 @@ export async function POST(req:NextRequest) {
             status :"pending",
             team_id :teamid,
             token,
-            createdAt: new Date(),
+            createdAt: new Date().toISOString(),
             role
         })
         return NextResponse.json({msg:docref,success:true})
