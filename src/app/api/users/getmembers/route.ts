@@ -9,7 +9,7 @@ export async function POST(req:NextRequest) {
     try {
         const {team_id}=await req.json()
         const clerkclient =await  clerkClient();
-        const userlist = await clerkclient.users.getUserList();
+        
         if (!team_id) {
             return NextResponse.json({ message: 'Invalid teamId' }, { status: 400 });
           }
@@ -17,17 +17,30 @@ export async function POST(req:NextRequest) {
         const teammembersnap=await getDocs(q)
         const memberdata=teammembersnap.docs.map(doc => doc.data());
         const userIds = memberdata.map(m => {
-            return {user_id:m.user_id,role:m.role}
+           
+            return m.user_id
         });
-       
-       const response= userIds.map(user=>{
-            return userlist.data.filter(i => i.id === user.user_id);
+        const users = await clerkclient.users.getUserList({userId:userIds});
+        const members = users.data.map(user => {
+            const memberMeta = memberdata.find(m => m.user_id === user.id);
+            return {
+              id: user.id,
+              name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+              email: user.emailAddresses?.[0]?.emailAddress || '',
+              role: memberMeta?.role || 'member',
+              joinedAt: memberMeta?.joinedAt?.toDate() || null,
+            };
+          });
+          console.log(members);
+          
+    //    const response= userIds.map(user=>{
+    //         return userlist.data.filter(i => i.id === user.user_id);
             
-        })
-        console.log(response);
+    //     })
         
         
-        return NextResponse.json({response},{status:200})
+        
+        return NextResponse.json({response:members},{status:200})
     } catch (error:any) {
         return NextResponse.json({msg:error.message},{status:500})
     }

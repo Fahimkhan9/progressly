@@ -68,6 +68,8 @@ loadteam()
                       const data={team_id}
                       const res=await axios.post('/api/users/getmembers',data)
                       console.log(res);
+                      console.log(res.data);
+                      
                       setMembers(res.data.response)
                     }
                 } catch (error) {
@@ -122,7 +124,7 @@ loadteam()
      <TeamModal
      team={selectedTeam}
      user={user}
-     members={members[0]}
+     members={members}
      />
     </tbody>
   </table>

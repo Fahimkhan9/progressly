@@ -74,11 +74,11 @@ function TeamModal({team,user,members}) {
     </thead>
     <tbody>
      {
-      members.length>0 && members.map(item=>(
+      members?.length>0 && members?.map(item=>(
 <tr key={item.id}  className="hover:bg-base-300">
       
-      <td>{item.firstName} {item.lastName}</td>
-      <td>User or Admin</td>
+      <td>{item.name} </td>
+      <td>{item.role}</td>
       <td className='btn btn-secondary' ><CiMenuBurger/></td>
     </tr>
       ))
