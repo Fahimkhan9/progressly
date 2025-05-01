@@ -21,11 +21,13 @@ const storage = getStorage(app);
 const teamCollection = collection(db, "team");
 const invitationCollection=collection(db,'invitation')
 const teammemberCollection=collection(db,'teammember')
+const projectCollection=collection(db,'project')
 export {
   app,
   db,
   storage,
   teamCollection,
   invitationCollection,
-  teammemberCollection
+  teammemberCollection,
+  projectCollection
 };

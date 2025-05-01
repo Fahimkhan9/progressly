@@ -48,13 +48,13 @@ function TeamCreateForm() {
   <legend className="fieldset-legend">Create a Team</legend>
 
   <form onSubmit={handleSubmit(onSubmit)}>
-  <label className="label">Name</label>
-  <input {...register("name", { required: true })} type="text" className="input" placeholder="Name" />
+  <label htmlFor='name' className="label">Name</label>
+  <input id='name' {...register("name", { required: true })} type="text" className="input" placeholder="Name" />
  {errors.name && <span className='text-red' >{errors.name.message}</span>}
-  <label className="label">Description</label>
-  <textarea {...register("description", { required: true })} className="input" placeholder="Description" />
+  <label htmlFor='description' className="label">Description</label>
+  <textarea id='description' {...register("description", { required: true })} className="input" placeholder="Description" />
   {errors.description && <span className='text-red' >{errors.description.message}</span>}
-  <button disabled={isSubmitting} type='submit' className="btn btn-secondary mt-4">Login</button>
+  <button disabled={isSubmitting} type='submit' className="btn btn-secondary mt-4">Create Team</button>
   </form>
   <ToastContainer
 position="top-right"
