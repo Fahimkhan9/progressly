@@ -1,5 +1,6 @@
 import { projectCollection } from '@/lib/firebase'
 import { useUser } from '@clerk/nextjs'
+import axios from 'axios'
 import { doc, setDoc } from 'firebase/firestore'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -26,11 +27,13 @@ function ProjectCreateForm({teams}) {
     } = useForm<Inputs>()
     const onSubmit:SubmitHandler<Inputs>=async (values)=>{
       try {
-        await setDoc(doc(projectCollection),{
-          ...values,
-          creator_id:user.id,
-          creator_email:user.emailAddresses?.[0]?.emailAddress
-        })
+        const data={
+          name:values.name,
+          description:values.description,
+          teamId:values.team_id,
+      
+        }
+        const res=await axios.post('/api/projects/create',data)
         toast.success('Team created successfully!', {
           position: "top-right",
           autoClose: 5000,

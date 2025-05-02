@@ -21,31 +21,35 @@ function Page() {
     const [isLoading,setIsLoading]=useState(false)
     const [members,setMembers]=useState([])
     const loadteam = async () => {
+        console.log(user);
         
         
         try {
             
             setIsLoading(true)
+            const res=await axios.get('/api/users/getteams')
+            console.log(res.data);
             
-            const q = query(teamCollection, where('creator_id', "==", user?.id))
-            const querySnapshot = await getDocs(q);
-            const temp:team[]=[]
-            querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
+            setTeams(res.data.teams)
+            // const q = query(teamCollection, where('creator_id', "==", user?.id))
+            // const querySnapshot = await getDocs(q);
+            // const temp:team[]=[]
+            // querySnapshot.forEach((doc) => {
+            //     // doc.data() is never undefined for query doc snapshots
                 
-                const data={
-                    id:doc.id,
-                    ...doc.data()
-                }
-                temp.push(data)
+            //     const data={
+            //         id:doc.id,
+            //         ...doc.data()
+            //     }
+            //     temp.push(data)
                 
               
                 
                 
-            });
-            if(temp.length>0){
-                setTeams(() => temp as team[])
-            }
+            // });
+            // if(temp.length>0){
+            //     setTeams(() => temp as team[])
+            // }
             
             
         } catch (error) {
@@ -101,6 +105,8 @@ loadteam()
        
         <th>Name</th>
         <th>Description</th>
+        
+
         <th>Action</th>
       </tr>
     </thead>

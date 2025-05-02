@@ -1,0 +1,85 @@
+import { db, teamCollection, teammemberCollection } from "@/lib/firebase";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
+import { getDocs, query, where } from "firebase/firestore";
+import { NextRequest, NextResponse } from "next/server";
+
+
+export async function GET(req: NextRequest) {
+    try {
+        const { userId } = await getAuth(req)
+        if (!userId) {
+            return NextResponse.json({ msg: "UNAUTOHORIZED" }, { status: 401 })
+        }
+        const oq = query(teamCollection, where('creator_id', '==', userId))
+        const ownedteamsnap = await getDocs(oq)
+        const ownedTeams = ownedteamsnap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+            role: 'admin',
+        }));
+        const mq = query(teammemberCollection, where('user_id', '==', userId))
+        const memberSnap = await getDocs(mq)
+        const teamIds = memberSnap.docs.map(doc => doc.data().team_id);
+        let memberTeams: any[] = [];
+
+        // Only query if user is member of any teams
+        //    if (teamIds.length > 0) {
+        //     const tq=query(teamCollection,where('__name__','in',teamIds.slice(0,10)))
+        //     const teamsSnap=await getDocs(tq)
+        //     //  const teamsSnap = await firestore
+        //     //    .collection('teams')
+        //     //    .where('__name__', 'in', teamIds.slice(0, 10)) // Firestore allows 10 `in` values
+        //     //    .get();
+
+        //      memberTeams = teamsSnap.docs.map(doc => ({
+        //        id: doc.id,
+        //        ...doc.data(),
+        //        role: 'user',
+        //      }));
+        //    }
+        if (teamIds.length > 0) {
+            const teamIdChunks: string[][] = [];
+            for (let i = 0; i < teamIds.length; i += 10) {
+                teamIdChunks.push(teamIds.slice(i, i + 10));
+            }
+            const teamFetches = teamIdChunks.map(async chunk => {
+                const q = query(teamCollection, where('__name__', 'in', chunk))
+                return await getDocs(q)
+            }
+                // teamCollection.where('__name__', 'in', chunk).get()
+            );
+
+            const teamSnapshots = await Promise.all(teamFetches);
+
+            memberTeams = teamSnapshots.flatMap(snapshot =>
+                snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    role: 'member',
+                }))
+            );
+
+        }
+        const teamsMap = new Map<string, any>();
+
+        // Add member teams first
+        for (const team of memberTeams) {
+            teamsMap.set(team.id, team);
+        }
+
+        // Then overwrite with owner teams (higher priority)
+        for (const team of ownedTeams) {
+            teamsMap.set(team.id, team); // replaces member entry if duplicate
+        }
+
+        const allTeams = Array.from(teamsMap.values());
+        console.log('allteams',allTeams);
+        
+        
+        
+        
+        return NextResponse.json({ owned: ownedTeams, member: memberTeams, teams: allTeams })
+    } catch (error: any) {
+        return NextResponse.json({ msg: error.message }, { status: 500 })
+    }
+}

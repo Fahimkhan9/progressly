@@ -1,43 +1,64 @@
-import React from 'react'
+
+'use client'
+import { projectCollection } from '@/lib/firebase'
+import { useUser } from '@clerk/nextjs'
+import axios from 'axios'
+import { getDocs, query, where } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
+import { CiMenuKebab } from 'react-icons/ci'
 
 function ProjectsPage() {
+  const {user,isLoaded}=useUser()
+   const [isLoading,setIsLoading]=useState(false)
+   const [projects,setProjects]=useState([])
+  const loadproject=async ()=>{
+    try {
+      setIsLoading(true)
+      const res= await axios.get('/api/projects')
+      console.log(res.data.projects);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }finally{
+      setIsLoading(false)
+    }
+  }
+  useEffect(()=>{
+    loadproject()
+  },[])
   return (
-    <div className="overflow-x-auto m-5">
-  <table className="table">
+   <div className="flex flex-row min-h-screen  justify-center">
+     <div className="overflow-x-auto w-full m-5">
+  {
+    isLoading ? <span className="loading loading-bars loading-xl"></span>:<table className="table">
     {/* head */}
     <thead>
       <tr>
-        <th></th>
+        
         <th>Name</th>
-        <th>Lead</th>
+        <th>Owner</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      {/* row 1 */}
-      <tr>
-        <th>1</th>
-        <td>Cy Ganderton</td>
-        <td>Quality Control Specialist</td>
-        <td>Blue</td>
+    {
+      projects.length>0 && projects.map(item=>(
+        <tr key={item.id} className="hover:bg-base-300">
+       <td>{item.name}</td>
+        <td>{item.creator_email}</td>
+        
+        <td className='btn btn-secondary' ><CiMenuKebab/></td>
       </tr>
-      {/* row 2 */}
-      <tr className="hover:bg-base-300">
-        <th>2</th>
-        <td>Hart Hagerty</td>
-        <td>Desktop Support Technician</td>
-        <td>Purple</td>
-      </tr>
-      {/* row 3 */}
-      <tr>
-        <th>3</th>
-        <td>Brice Swyre</td>
-        <td>Tax Accountant</td>
-        <td>Red</td>
-      </tr>
+      ))
+    }
+     
+     
     </tbody>
   </table>
+  }
 </div>
+   </div>
   )
 }
 

@@ -22,7 +22,10 @@ function ProjectCreatePage() {
             
             setIsLoading(true)
             
-            const q = query(teamCollection, where('creator_id', "==", user?.id))
+            if(user?.id){
+                console.log('fbk');
+                
+                const q = query(teamCollection, where('creator_id', "==", user?.id))
             const querySnapshot = await getDocs(q);
             const temp:team[]=[]
             querySnapshot.forEach((doc) => {
@@ -38,8 +41,11 @@ function ProjectCreatePage() {
                 
                 
             });
+            console.log(temp);
+            
             if(temp.length>0){
                 setTeams(() => temp as team[])
+            }
             }
             
             
