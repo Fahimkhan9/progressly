@@ -4,6 +4,7 @@ import { projectCollection } from '@/lib/firebase'
 import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
 import { getDocs, query, where } from 'firebase/firestore'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { CiMenuKebab } from 'react-icons/ci'
 
@@ -16,7 +17,7 @@ function ProjectsPage() {
       setIsLoading(true)
       const res= await axios.get('/api/projects')
       console.log(res.data.projects);
-      
+      setProjects(res.data.projects)
     } catch (error) {
       console.log(error);
       
@@ -45,7 +46,9 @@ function ProjectsPage() {
     {
       projects.length>0 && projects.map(item=>(
         <tr key={item.id} className="hover:bg-base-300">
-       <td>{item.name}</td>
+       <td>
+       <Link href={`/projects/${item.id}/board`} > {item.name}</Link>
+        </td>
         <td>{item.creator_email}</td>
         
         <td className='btn btn-secondary' ><CiMenuKebab/></td>

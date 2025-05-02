@@ -13,7 +13,7 @@ export async function GET(req:NextRequest) {
       }
       const q=query(teammemberCollection,where("user_id",'==',userId))
       const membersnap=await getDocs(q)
-      const teamIds = membersnap.docs.map(doc => doc.data().teamId);
+      const teamIds = membersnap.docs.map(doc => doc.data().team_id);
       if (teamIds.length === 0) {
         return NextResponse.json({ projects: [] });
       }

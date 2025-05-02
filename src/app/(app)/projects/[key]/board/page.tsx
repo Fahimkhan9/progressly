@@ -51,7 +51,9 @@ const INITIAL_TASKS: Task[] = [
     },
   ];
 
-function Page() {
+function Page({params}) {
+  const {key}=params
+    console.log(key);
     const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
     function handleDragEnd(event: DragEndEvent) {
         const { active, over } = event;

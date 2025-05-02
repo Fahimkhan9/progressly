@@ -22,6 +22,7 @@ const teamCollection = collection(db, "team");
 const invitationCollection=collection(db,'invitation')
 const teammemberCollection=collection(db,'teammember')
 const projectCollection=collection(db,'project')
+const taskCollection=collection(db,'task')
 export {
   app,
   db,
@@ -29,5 +30,6 @@ export {
   teamCollection,
   invitationCollection,
   teammemberCollection,
-  projectCollection
+  projectCollection,
+  taskCollection
 };

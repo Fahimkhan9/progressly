@@ -2,6 +2,7 @@ import { projectCollection } from '@/lib/firebase'
 import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
 import { doc, setDoc } from 'firebase/firestore'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Slide, toast } from 'react-toastify'
@@ -25,6 +26,7 @@ function ProjectCreateForm({teams}) {
       watch,
       formState: { errors,isSubmitting },
     } = useForm<Inputs>()
+    const router=useRouter()
     const onSubmit:SubmitHandler<Inputs>=async (values)=>{
       try {
         const data={
@@ -45,7 +47,7 @@ function ProjectCreateForm({teams}) {
           theme: "colored",
           transition: Slide,
           });
-
+          // router.push('/projects')
       } catch (error) {
         console.log(error);
         
