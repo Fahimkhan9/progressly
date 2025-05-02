@@ -1,12 +1,8 @@
+import { Task } from '@/app/(app)/projects/[key]/board/page';
 import { useDraggable } from '@dnd-kit/core';
 import React from 'react'
 type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
-type Task = {
-  id: string;
-  status: TaskStatus;
-  title: string;
-  description: string;
-};
+
 type TaskCardProps = {
   task: Task;
 };

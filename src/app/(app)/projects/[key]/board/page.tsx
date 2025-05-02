@@ -1,10 +1,11 @@
 'use client'
 import BoardColumn from '@/components/BoardColumn'
+import FullPageLoader from '@/components/FullPageLoader'
 import Sidebar from '@/components/Sidebar'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import axios from 'axios'
 import React, { use, useEffect, useState } from 'react'
-import { set } from 'react-hook-form'
+
 type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
 type column = {
   id: string,
@@ -117,9 +118,12 @@ async  function handleDragEnd(event: DragEndEvent) {
   return (
     <div className="flex p-5">
       <div className="w-40 flex-none ...">
-        <Sidebar />
+        <Sidebar id={key} />
+            {isUpdatingTask && <FullPageLoader/>}
       </div>
-      <DndContext  onDragEnd={handleDragEnd}>
+  {/* <div> */}
+
+  <DndContext  onDragEnd={handleDragEnd}>
         {
           columns.map(column => <BoardColumn
             key={column.id}
@@ -130,7 +134,9 @@ async  function handleDragEnd(event: DragEndEvent) {
             tasks={tasks.filter((task) => task.status === column.id)}
           />)
         }
+       
       </DndContext>
+  {/* </div> */}
 
 
 
