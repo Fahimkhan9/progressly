@@ -5,13 +5,15 @@ import { doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore"
 import { NextRequest, NextResponse } from "next/server";
 
 
-export async function GET(req:NextRequest) {
+export async function GET(req:NextRequest, { params }: { params: { projectId: string } }) {
     try {
        const {userId}=await getAuth(req)
        if (!userId) {
         return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
       }
-      const { projectId } = await req.json();
+      console.log(params);
+      
+      const { projectId } = params; 
 
       if (!projectId) {
         return NextResponse.json({ message: 'Missing projectId' }, { status: 400 });

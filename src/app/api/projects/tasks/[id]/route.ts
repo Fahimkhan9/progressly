@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth } from "@clerk/nextjs/server";
-import { taskCollection, teammemberCollection } from '@/lib/firebase';
-import { doc, getDoc, getDocs, query, where, updateDoc } from 'firebase/firestore';
+import { projectCollection, taskCollection, teammemberCollection } from '@/lib/firebase';
+import { doc, getDoc, getDocs, query, where, updateDoc, orderBy } from 'firebase/firestore';
 
-export async function PATCH(req: NextRequest, { params }: { params: { taskId: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
     const {userId}=await getAuth(req)
     if (!userId) {
      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
    }
 
-  const { taskId } = params;
+  const { id } = params;
   const updateData = await req.json();
 
-  if (!taskId) {
+  if (!id) {
     return NextResponse.json({ message: 'Missing task ID' }, { status: 400 });
   }
 
   try {
-    const taskRef = doc(taskCollection, taskId);
+    const taskRef = doc(taskCollection, id);
    
     const taskSnap = await getDoc(taskRef);
     if (!taskSnap.exists) {
@@ -30,13 +30,13 @@ export async function PATCH(req: NextRequest, { params }: { params: { taskId: st
 
     // Step 2: Get project to find teamId
     // const projectSnap = await firestore.collection('projects').doc(task.projectId).get();
-    const projectRef = doc(taskCollection, task.projectId);
+    const projectRef = doc(projectCollection, task.projectId);
     const projectSnap = await getDoc(projectRef);
     if (!projectSnap.exists) {
       return NextResponse.json({ message: 'Project not found' }, { status: 404 });
     }
     const project = projectSnap.data();
-    const teamId = project?.teamId;
+    const teamId = project?.team_id;
 
     // Step 3: Check if user is team owner
     // const teamSnap = await firestore.collection('teams').doc(teamId).get();
@@ -44,7 +44,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { taskId: st
     const teamRef = doc(taskCollection, teamId);
     const teamSnap = await getDoc(teamRef);
     const team=teamSnap.data()
-    const isOwner = team?.ownerId === userId;
+    const isOwner = team?.creator_id === userId;
 
     // Step 4: Check if user is a team member
     // const memberSnap = await firestore
@@ -78,4 +78,28 @@ const memberSnap = await getDocs(mq);
     console.error('Error updating task:', error);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
+}
+export async function GET(req:NextRequest, { params }: { params: { id: string } }) {
+    try {
+       const {userId}=await getAuth(req)
+       if (!userId) {
+        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+      }
+      console.log(params);
+      
+      const { id} = params; 
+
+      if (!id) {
+        return NextResponse.json({ message: 'Missing projectId' }, { status: 400 });
+      }
+      const tq=query(taskCollection,where('projectId', '==', id),orderBy('order'))
+      const tasksSnap=await getDocs(tq)
+      const tasks = tasksSnap.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      return NextResponse.json({ tasks });
+    } catch (error:any) {
+        return NextResponse.json({msg:error.message},{status:500})
+    }
 }

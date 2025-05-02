@@ -13,7 +13,7 @@ export async function POST(req:NextRequest) {
         return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
       }
       const { projectId, title, description, status = 'todo', assignedTo } = await req.json();
-      if([projectId,title,description,status,assignedTo].some((item)=>item.trim()=='')){
+      if(!projectId || !title || !description || !status || !assignedTo) {
         return NextResponse.json({msg:"All fields are required"},{status:400})
       }
       const taskRef = await addDoc(taskCollection,{
