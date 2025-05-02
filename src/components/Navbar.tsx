@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import React, {  useState } from 'react'
-import { Slide, toast, ToastContainer } from 'react-toastify';
-
+import { Slide, toast } from 'react-toastify';
+import logo from '../assets/logo.png'
 function Navbar() {
   const [logoutloading,setLogoutLoading]=useState(false)
   const {isSignedIn,isLoaded,user}=useUser()
@@ -70,29 +70,19 @@ function Navbar() {
         </li>
       
         <li onClick={()=>handlesignout()} >
-          <button disabled={logoutloading} className='btn bg-red-300'>Logout</button>
+          <button disabled={logoutloading} className='btn bg-red-800 text-white'>Logout</button>
         </li>
       </ul>
-      <ToastContainer
-position="top-right"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick={false}
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="colored"
-transition={Slide}
-/>
+     
     </div>
     )
   }
   return (
     <div className="navbar  bg-base-100  shadow-sm">
   <div className="flex-1">
-    <Link href={'/'}><button className="btn btn-ghost text-xl">daisyUI</button></Link>
+    <Link href={'/'}><button className="btn btn-ghost text-xl">
+      <img src={logo.src} alt="progressly logo" height={'50px'} width={'100px'} />
+      </button></Link>
   </div>
   <div className="flex gap-2 align-center">
     <h3>{user?.emailAddresses[0].emailAddress}</h3>
