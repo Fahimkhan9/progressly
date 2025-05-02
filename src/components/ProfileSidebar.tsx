@@ -1,4 +1,4 @@
-import { Link } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 function ProfileSidebar() {
@@ -18,8 +18,14 @@ function ProfileSidebar() {
                     <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
                     <ul className="menu bg-base-200 text-base-content min-h-full w-40 p-4">
                         {/* Sidebar content here */}
-                        <li><a>Create a Team
-                            </a></li>
+                        <li><a><Link href='/profile/team/create'>Create a Team</Link>
+                        </a></li>
+                        <li><a><Link href='/profile/team/'>Teams</Link>
+                        </a></li>
+                        <li><a><Link href='/projects/create/'>Create a Project</Link>
+                        </a></li>
+                        <li><a><Link href='/projects/'>Project</Link>
+                        </a></li>
                         <li><a> Profile</a></li>
                     </ul>
                 </div>

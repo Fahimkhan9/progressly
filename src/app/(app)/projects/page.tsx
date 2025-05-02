@@ -1,5 +1,6 @@
 
 'use client'
+import ProfileSidebar from '@/components/ProfileSidebar'
 import { projectCollection } from '@/lib/firebase'
 import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
@@ -29,6 +30,11 @@ function ProjectsPage() {
     loadproject()
   },[])
   return (
+  <div className="flex">
+    <div className="w-30 flex-none">
+    <ProfileSidebar/>
+    </div>
+   <div className="w-60 flex-1 mx-5">
    <div className="flex flex-row min-h-screen  justify-center">
      <div className="overflow-x-auto w-full m-5">
   {
@@ -62,6 +68,8 @@ function ProjectsPage() {
   }
 </div>
    </div>
+   </div>
+  </div>
   )
 }
 

@@ -1,4 +1,5 @@
 'use client'
+import ProfileSidebar from '@/components/ProfileSidebar'
 import ProjectCreateForm from '@/components/ProjectCreateForm'
 import { teamCollection } from '@/lib/firebase'
 import { useUser } from '@clerk/nextjs'
@@ -47,12 +48,19 @@ function ProjectCreatePage() {
 
 
     return (
+       <div className="flex">
+        <div className="w-30 flex-none">
+<ProfileSidebar/>
+        </div>
+        <div className="w-60 flex-1 mx-5">
         <div className='flex flex-row min-h-screen justify-center items-center'>
             {
                 isLoading ? <span className="loading loading-bars loading-xl"></span> : <ProjectCreateForm teams={teams} />
             }
 
         </div>
+        </div>
+       </div>
     )
 }
 

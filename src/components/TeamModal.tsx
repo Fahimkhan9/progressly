@@ -19,7 +19,7 @@ type props={
 }
 function TeamModal({team,user,members,ismemberLoading}) {
     const [allusers,setAllusers]=useState([])
-    
+    const [isTeamSearchLoading,setIsTeamSearchLoading]=useState(false)
     const [role,setRole]=useState('')
     const invitemember=async (item)=>{
         try {
@@ -91,6 +91,7 @@ function TeamModal({team,user,members,ismemberLoading}) {
 </div>
 <TeamMemberSearch
 setAllusers={setAllusers}
+setIsTeamSearchLoading={setIsTeamSearchLoading}
 />
 <div className="overflow-x-auto">
   <table className="table">
@@ -106,6 +107,10 @@ setAllusers={setAllusers}
       </tr>
     </thead>
     <tbody>
+      {isTeamSearchLoading && <span className="loading loading-ring loading-xl"></span>}
+      {
+        allusers.length===0 && <tr><td colSpan={3} className='text-center'>No Users Found</td></tr>
+      }
       {
         allusers.length>0 && allusers.map(item=>(
             <tr key={item.id} className="hover:bg-base-300 items-center">
