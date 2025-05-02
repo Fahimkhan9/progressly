@@ -1,7 +1,7 @@
-import { db, invitationCollection, teamCollection, teammemberCollection } from "@/lib/firebase";
-import { generateJwtToken } from "@/lib/utils";
+import {  invitationCollection, teamCollection, teammemberCollection } from "@/lib/firebase";
+
 import { currentUser, getAuth } from "@clerk/nextjs/server";
-import { collection, doc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
+import {  doc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const { userId } = await getAuth(req)
     const user = await currentUser()
     const userEmail = user?.emailAddresses[0].emailAddress
-    console.log(userId);
+   
 
     if (!userId) {
       return NextResponse.json({ msg: 'UNAUTHORIZED' }, { status: 401 })

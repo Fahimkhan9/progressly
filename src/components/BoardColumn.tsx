@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import BoardCard from './BoardCard'
 import { useDroppable } from '@dnd-kit/core';
-import { CiDatabase } from 'react-icons/ci';
+
 import { IoIosAddCircle } from 'react-icons/io';
 import TaskModal from './TaskModal';
 import { Task } from '@/app/(app)/projects/[key]/board/page';
@@ -28,11 +28,16 @@ function BoardColumn({ column, tasks,members,projectId,isUpdatingTask }: ColumnP
   const [columnId,setColumnId]=useState('')
   const handleAddTask = (columnId: string) => {
     setColumnId(()=> columnId)
-    console.log(columnId);
+
     
-   document.getElementById('my_modal_3').showModal();
+   const modal = document.getElementById('task_modal') as HTMLDialogElement;
+   if (modal) {
+     modal.showModal();
+   }
     
   }
+ 
+  
   return (
  <>
     <div ref={setNodeRef}  className="w-20 flex-1 mx-2">

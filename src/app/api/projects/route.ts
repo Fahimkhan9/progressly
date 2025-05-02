@@ -23,7 +23,7 @@ export async function GET(req:NextRequest) {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log(projects)
+   
       return NextResponse.json({ projects });
     } catch (error:any) {
         return NextResponse.json({msg:error.message},{status:500})

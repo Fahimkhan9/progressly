@@ -2,7 +2,7 @@
 import axios from 'axios'
 import React, { useEffect } from 'react'
 
-function Page({params}) {
+function Page({params}: { params: { token: string } }) {
   
   useEffect(()=>{
     (async ()=>{
@@ -11,7 +11,7 @@ function Page({params}) {
       if(token){
         const data={token}
         const res=await axios.post('/api/users/invitemember/accept',data)
-        console.log(res);
+      
         
       }
      } catch (error) {

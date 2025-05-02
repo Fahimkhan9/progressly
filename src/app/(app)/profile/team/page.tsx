@@ -1,12 +1,13 @@
 'use client'
 import ProfileSidebar from '@/components/ProfileSidebar'
 import TeamModal from '@/components/TeamModal';
-import { db, teamCollection } from '@/lib/firebase';
+
 import { useUser } from '@clerk/nextjs';
 import axios from 'axios';
-import { doc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+
 import React, { useEffect, useState } from 'react'
-import { CiMenuKebab } from "react-icons/ci";
+
+import { FaEye } from "react-icons/fa";
 type team = {
     name: string,
     description: string,
@@ -22,14 +23,13 @@ function Page() {
     const [ismemberLoading, setIsMemberLoading] = useState(false)
     const [members, setMembers] = useState([])
     const loadteam = async () => {
-        console.log(user);
+
 
 
         try {
 
             setIsLoading(true)
             const res = await axios.get('/api/users/getteams')
-            console.log(res.data);
 
             setTeams(res.data.teams)
 
@@ -46,24 +46,24 @@ function Page() {
     useEffect(() => {
         loadteam()
     }, [])
-    const loadteammembers = async (team_id) => {
+    const loadteammembers = async (team_id:string) => {
         try {
             setIsMemberLoading(true)
-            console.log(team_id);
+
 
             if (team_id) {
                 const data = { team_id }
                 const res = await axios.post('/api/users/getmembers', data)
 
-                console.log(res.data.response);
+
 
                 setMembers(res.data.response)
                 setIsMemberLoading(false)
             }
         } catch (error) {
             console.log(error);
-setIsMemberLoading(false)
-        }finally {
+            setIsMemberLoading(false)
+        } finally {
             setIsMemberLoading(false)
         }
     }
@@ -73,7 +73,10 @@ setIsMemberLoading(false)
 
         setSelectedTeam(() => selectteam[0])
         loadteammembers(selectteam[0].id)
-        document.getElementById('teammodal').showModal()
+        const modal = document.getElementById('teammodal') as HTMLDialogElement;
+        if (modal) {
+            modal.showModal();
+        }
     }
     return (
         <div className="flex">
@@ -93,7 +96,7 @@ setIsMemberLoading(false)
                                 <th>Description</th>
 
 
-                                <th>Action</th>
+                                <th>Details</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,7 +108,7 @@ setIsMemberLoading(false)
                                     <tr className="hover:bg-base-300" key={item.id}>
                                         <td>{item.name}</td>
                                         <td>{item.description}</td>
-                                        <td className='btn' onClick={() => handleteammodal(item.id)}><CiMenuKebab /></td>
+                                        <td className='btn' onClick={() => handleteammodal(item.id)}><FaEye /></td>
 
 
                                     </tr>

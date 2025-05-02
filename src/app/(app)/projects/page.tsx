@@ -1,23 +1,23 @@
 
 'use client'
 import ProfileSidebar from '@/components/ProfileSidebar'
-import { projectCollection } from '@/lib/firebase'
+
 import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
-import { getDocs, query, where } from 'firebase/firestore'
+
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { CiMenuKebab } from 'react-icons/ci'
 
 function ProjectsPage() {
-  const {user,isLoaded}=useUser()
+  const {user}=useUser()
    const [isLoading,setIsLoading]=useState(false)
-   const [projects,setProjects]=useState([])
+   const [projects,setProjects]=useState<{ id: string; name: string; creator_id: string; creator_email: string }[]>([])
   const loadproject=async ()=>{
     try {
       setIsLoading(true)
       const res= await axios.get('/api/projects')
-      console.log(res.data.projects);
+   
       setProjects(res.data.projects)
     } catch (error) {
       console.log(error);
@@ -45,7 +45,7 @@ function ProjectsPage() {
         
         <th>Name</th>
         <th>Owner</th>
-        <th>Actions</th>
+        {projects[0]?.creator_id === user?.id && <th>Actions</th>}
       </tr>
     </thead>
     <tbody>
@@ -57,7 +57,7 @@ function ProjectsPage() {
         </td>
         <td>{item.creator_email}</td>
         
-        <td className='btn btn-secondary' ><CiMenuKebab/></td>
+        {item?.creator_id === user?.id && <td className='btn bg-[#7C4585] text-white' ><CiMenuKebab/></td>}
       </tr>
       ))
     }

@@ -1,7 +1,7 @@
-import { invitationCollection, teamCollection, teammemberCollection } from "@/lib/firebase";
-import { generateJwtToken } from "@/lib/utils";
+import {  teammemberCollection } from "@/lib/firebase";
+
 import { clerkClient } from "@clerk/nextjs/server";
-import { doc, getDocs, query, setDoc, where } from "firebase/firestore";
+import {  getDocs, query, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -31,12 +31,8 @@ export async function POST(req:NextRequest) {
               joinedAt: memberMeta?.joinedAt || null,
             };
           });
-          console.log(members);
-          
-    //    const response= userIds.map(user=>{
-    //         return userlist.data.filter(i => i.id === user.user_id);
-            
-    //     })
+         
+   
         
         
         

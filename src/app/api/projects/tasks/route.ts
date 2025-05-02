@@ -1,7 +1,7 @@
-import { invitationCollection, projectCollection, taskCollection, teamCollection, teammemberCollection } from "@/lib/firebase";
-import { generateJwtToken } from "@/lib/utils";
+import { taskCollection } from "@/lib/firebase";
+
 import { getAuth } from "@clerk/nextjs/server";
-import { doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore";
+import {  getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -11,7 +11,7 @@ export async function GET(req:NextRequest, { params }: { params: { projectId: st
        if (!userId) {
         return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
       }
-      console.log(params);
+      
       
       const { projectId } = params; 
 

@@ -4,7 +4,7 @@ import FullPageLoader from '@/components/FullPageLoader'
 import Sidebar from '@/components/Sidebar'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import axios from 'axios'
-import React, { use, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 
 type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
 type column = {
@@ -34,7 +34,7 @@ export interface Task {
 
 function Page({ params }: { params: { key: string } }) {
   const { key } = params;
-  console.log(key);
+
   const [members, setMembers] = useState([])
   const [ismemberLoading, setIsMemberLoading] = useState(false)
   const [isUpdatingTask,setIsUpdatingTask]=useState(false)
@@ -47,15 +47,14 @@ async  function handleDragEnd(event: DragEndEvent) {
 
     const taskId = active.id as string;
     const newStatus = over.id as Task['status'];
-    console.log(taskId);
-    console.log(newStatus);
+
     const data={
       status: newStatus,
       order: Date.now(),
     }
     setIsUpdatingTask(true)
     const res=await axios.patch(`/api/projects/tasks/${taskId}`, data)
-    console.log(res.data);
+   
     
     setTasks(() =>
       tasks.map((task) =>
@@ -79,13 +78,13 @@ async  function handleDragEnd(event: DragEndEvent) {
   const loadteammembers = async (team_id: string) => {
     try {
       setIsMemberLoading(true)
-      console.log(team_id);
+    
 
       if (team_id) {
         const data = { team_id }
         const res = await axios.post('/api/users/getmembers', data)
 
-        console.log(res.data.response);
+       
 
         setMembers(res.data.response)
         setIsMemberLoading(false)
@@ -101,7 +100,7 @@ async  function handleDragEnd(event: DragEndEvent) {
     try {
 
       const res = await axios.get(`/api/projects/tasks/${projectId}`)
-      console.log(res.data.tasks);
+    
       setTasks(res.data.tasks)
 
     } catch (error) {
@@ -111,10 +110,12 @@ async  function handleDragEnd(event: DragEndEvent) {
   }
   useEffect(() => {
     loadteammembers(key)
-    loadtasks(key)
+   
 
   }, [])
-
+useEffect(()=>{
+  loadtasks(key)
+},[tasks])
   return (
     <div className="flex p-5">
       <div className="w-40 flex-none ...">

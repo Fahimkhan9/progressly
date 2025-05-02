@@ -1,12 +1,12 @@
 
 'use client'
-import { teamCollection } from '@/lib/firebase'
-import { useUser } from '@clerk/nextjs'
+
 import axios from 'axios'
-import { addDoc, doc, setDoc } from 'firebase/firestore'
+
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
-import { Slide, toast, ToastContainer } from 'react-toastify'
+import { Slide, toast } from 'react-toastify'
 type Inputs = {
   name: string
   description: string
@@ -18,7 +18,8 @@ function TeamCreateForm() {
     watch,
     formState: { errors,isSubmitting },
   } = useForm<Inputs>()
-  const {user}=useUser()
+ const router=useRouter()
+
   const onSubmit: SubmitHandler<Inputs> = async (values) => {
     try {
       // const docref=await setDoc(doc(teamCollection),{
@@ -42,7 +43,7 @@ function TeamCreateForm() {
                 theme: "colored",
                 transition: Slide,
                 });
-      
+      router.push('/profile/team')
       
     } catch (error) {
       console.log(error);
@@ -58,13 +59,14 @@ function TeamCreateForm() {
   <input id='name' {...register("name", { required: true })} type="text" className="input" placeholder="Name" />
  {errors.name && <span className='text-red' >{errors.name.message}</span>}
   <label htmlFor='description' className="label">Description</label>
-  <textarea id='description' {...register("description", { required: true })} className="input" placeholder="Description" />
+  <textarea maxLength={50} id='description' {...register("description", { required: true })} className="input" placeholder="Description" />
   {errors.description && <span className='text-red' >{errors.description.message}</span>}
-  <button disabled={isSubmitting} type='submit' className="btn btn-secondary mt-4">Create Team</button>
+  <button disabled={isSubmitting} type='submit' className="btn text-white bg-[#3D365C] mt-4">Create Team</button>
   </form>
   
 </fieldset>
   )
 }
+
 
 export default TeamCreateForm

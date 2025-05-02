@@ -1,7 +1,6 @@
-import { projectCollection } from '@/lib/firebase'
-import { useUser } from '@clerk/nextjs'
+
 import axios from 'axios'
-import { doc, setDoc } from 'firebase/firestore'
+
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -17,13 +16,13 @@ type team={
   creator_id:string,
   id:string
 }
-function ProjectCreateForm({teams}) {
-  const {user}=useUser()
+function ProjectCreateForm({teams}: { teams: team[] }) {
+  
 
   const {
       register,
       handleSubmit,
-      watch,
+      
       formState: { errors,isSubmitting },
     } = useForm<Inputs>()
     const router=useRouter()
@@ -35,7 +34,7 @@ function ProjectCreateForm({teams}) {
           teamId:values.team_id,
       
         }
-        const res=await axios.post('/api/projects/create',data)
+        await axios.post('/api/projects/create',data)
         toast.success('Team created successfully!', {
           position: "top-right",
           autoClose: 5000,
@@ -47,7 +46,7 @@ function ProjectCreateForm({teams}) {
           theme: "colored",
           transition: Slide,
           });
-          // router.push('/projects')
+          router.push('/projects')
       } catch (error) {
         console.log(error);
         
@@ -55,19 +54,19 @@ function ProjectCreateForm({teams}) {
 
     }
     
-    console.log(teams);
+  
     
   return (
     <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-  <legend className="fieldset-legend">Login</legend>
+  <legend className="fieldset-legend">Create Project</legend>
 <form onSubmit={handleSubmit(onSubmit)}>
-<label htmlFor='name' className="label">Email</label>
+<label htmlFor='name' className="label">Name</label>
   <input id='name' {...register("name", { required: true })}  type="text" className="input" placeholder="Enter project name" />
   <span className="text-red">{
     errors.name && errors.name.message
     }</span>
-  <label htmlFor='description' className="label">Password</label>
-  <textarea  id='description'  {...register("description", { required: true })} className="input" placeholder="Enter project description" />
+  <label htmlFor='description' className="label">Description</label>
+  <textarea maxLength={50}  id='description'  {...register("description", { required: true })} className="input" placeholder="Enter project description" />
   <span className="text-red">{
     errors.description && errors.description.message
     }</span>
@@ -83,7 +82,7 @@ function ProjectCreateForm({teams}) {
      <span className="text-red">{
     errors.team_id && errors.team_id.message
     }</span>
-  <button disabled={isSubmitting} type='submit' className="btn btn-neutral mt-4">Create Project</button>
+  <button disabled={isSubmitting} type='submit' className="btn text-white bg-[#3D365C] mt-4">Create Project</button>
 </form>
 
 

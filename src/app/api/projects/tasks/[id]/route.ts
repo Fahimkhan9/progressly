@@ -28,8 +28,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       return NextResponse.json({ message: 'Task data is undefined' }, { status: 500 });
     }
 
-    // Step 2: Get project to find teamId
-    // const projectSnap = await firestore.collection('projects').doc(task.projectId).get();
+    
     const projectRef = doc(projectCollection, task.projectId);
     const projectSnap = await getDoc(projectRef);
     if (!projectSnap.exists) {
@@ -38,21 +37,13 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const project = projectSnap.data();
     const teamId = project?.team_id;
 
-    // Step 3: Check if user is team owner
-    // const teamSnap = await firestore.collection('teams').doc(teamId).get();
-    // const team = teamSnap.data();
+    
     const teamRef = doc(taskCollection, teamId);
     const teamSnap = await getDoc(teamRef);
     const team=teamSnap.data()
     const isOwner = team?.creator_id === userId;
 
-    // Step 4: Check if user is a team member
-    // const memberSnap = await firestore
-    //   .collection('teamMembers')
-    //   .where('teamId', '==', teamId)
-    //   .where('userId', '==', userId)
-    //   .limit(1)
-    //   .get();
+    
 const mq=query(teammemberCollection,where('team_id', '==', teamId),where('user_id', '==', userId))  
 const memberSnap = await getDocs(mq);
     const isMember = !memberSnap.empty;
@@ -85,7 +76,7 @@ export async function GET(req:NextRequest, { params }: { params: { id: string } 
        if (!userId) {
         return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
       }
-      console.log(params);
+    
       
       const { id} = params; 
 

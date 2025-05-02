@@ -1,6 +1,6 @@
-import { invitationCollection, teamCollection } from "@/lib/firebase";
+import { invitationCollection } from "@/lib/firebase";
 import { generateJwtToken } from "@/lib/utils";
-import { doc, getDocs, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 

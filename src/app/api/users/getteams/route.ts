@@ -1,5 +1,5 @@
-import { db, teamCollection, teammemberCollection } from "@/lib/firebase";
-import { clerkClient, getAuth } from "@clerk/nextjs/server";
+import {  teamCollection, teammemberCollection } from "@/lib/firebase";
+import {  getAuth } from "@clerk/nextjs/server";
 import { getDocs, query, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -22,21 +22,7 @@ export async function GET(req: NextRequest) {
         const teamIds = memberSnap.docs.map(doc => doc.data().team_id);
         let memberTeams: any[] = [];
 
-        // Only query if user is member of any teams
-        //    if (teamIds.length > 0) {
-        //     const tq=query(teamCollection,where('__name__','in',teamIds.slice(0,10)))
-        //     const teamsSnap=await getDocs(tq)
-        //     //  const teamsSnap = await firestore
-        //     //    .collection('teams')
-        //     //    .where('__name__', 'in', teamIds.slice(0, 10)) // Firestore allows 10 `in` values
-        //     //    .get();
-
-        //      memberTeams = teamsSnap.docs.map(doc => ({
-        //        id: doc.id,
-        //        ...doc.data(),
-        //        role: 'user',
-        //      }));
-        //    }
+       
         if (teamIds.length > 0) {
             const teamIdChunks: string[][] = [];
             for (let i = 0; i < teamIds.length; i += 10) {
@@ -73,7 +59,7 @@ export async function GET(req: NextRequest) {
         }
 
         const allTeams = Array.from(teamsMap.values());
-        console.log('allteams',allTeams);
+      
         
         
         
