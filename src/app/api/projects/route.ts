@@ -17,7 +17,7 @@ export async function GET(req:NextRequest) {
       if (teamIds.length === 0) {
         return NextResponse.json({ projects: [] });
       }
-      const pq=query(projectCollection,where('teamId', 'in', teamIds.slice(0, 10)),orderBy('createdAt', 'desc'))
+      const pq=query(projectCollection,where('team_id', 'in', teamIds.slice(0, 10)),orderBy('createdAt', 'desc'))
       const projectsnap=await getDocs(pq)
       const projects = projectsnap.docs.map(doc => ({
         id: doc.id,

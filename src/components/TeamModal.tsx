@@ -17,7 +17,7 @@ type props={
     team:team,
     
 }
-function TeamModal({team,user,members}) {
+function TeamModal({team,user,members,ismemberLoading}) {
     const [allusers,setAllusers]=useState([])
     
     const [role,setRole]=useState('')
@@ -73,6 +73,7 @@ function TeamModal({team,user,members}) {
       </tr>
     </thead>
     <tbody>
+      {ismemberLoading && <span className="loading loading-ring loading-xl"></span>}
      {
       members?.length>0 && members?.map(item=>(
 <tr key={item.id}  className="hover:bg-base-300">

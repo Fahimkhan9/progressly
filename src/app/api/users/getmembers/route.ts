@@ -27,8 +27,8 @@ export async function POST(req:NextRequest) {
               id: user.id,
               name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
               email: user.emailAddresses?.[0]?.emailAddress || '',
-              role: memberMeta?.role || 'member',
-              joinedAt: memberMeta?.joinedAt?.toDate() || null,
+              role: memberMeta?.role || 'user',
+              joinedAt: memberMeta?.joinedAt || null,
             };
           });
           console.log(members);
