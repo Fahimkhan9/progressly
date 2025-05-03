@@ -6,6 +6,7 @@ import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core'
 import axios from 'axios'
 import React, {  use, useEffect, useState } from 'react'
 import { set } from 'react-hook-form'
+import { Slide, toast } from 'react-toastify'
 
 type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
 type column = {
@@ -39,6 +40,7 @@ function Page({ params }:any ) {
   const [members, setMembers] = useState([])
   const [ismemberLoading, setIsMemberLoading] = useState(false)
   const [isUpdatingTask,setIsUpdatingTask]=useState(false)
+  const [isLoadingTask,setIsLoadingTask] = useState(false)
   const [tasks, setTasks] = useState<Task[]>([]);
 async  function handleDragEnd(event: DragEndEvent) {
     try {
@@ -100,13 +102,28 @@ async  function handleDragEnd(event: DragEndEvent) {
   }
   const loadtasks = async (projectId: string) => {
     try {
-
+      setIsLoadingTask(true)
       const res = await axios.get(`/api/projects/tasks/${projectId}`)
     
       setTasks(res.data.tasks)
 
     } catch (error) {
       console.log(error);
+      // show toast eerror on top-right
+      
+      toast.error('Failed to load tasks!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Slide,
+        });      
+    }finally{
+      setIsLoadingTask(false)
 
     }
   }
@@ -123,7 +140,7 @@ useEffect(()=>{
     <div className="flex p-5">
       <div className="w-40 flex-none ...">
         <Sidebar id={key} />
-            {isUpdatingTask && <FullPageLoader/>}
+            {(isUpdatingTask || isLoadingTask )&& <FullPageLoader/>}
       </div>
   {/* <div> */}
 

@@ -1,3 +1,4 @@
+import ProfileCard from '@/components/ProfileCard'
 import ProfileSidebar from '@/components/ProfileSidebar'
 import React from 'react'
 
@@ -8,8 +9,8 @@ function ProfilePage() {
             <ProfileSidebar/>
         </div>  
         <div className="w-60 flex-1 mx-2">
-            <div className='flex flex-col items-center justify-center bg-sky-50'>
-                hello profile
+            <div className='flex flex-col items-center justify-center '>
+                <ProfileCard/>
             </div>
         </div>
     </div>
