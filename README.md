@@ -1,2 +1,2 @@
-##Progressly
-###A project management app for teams.
+## Progressly
+### A project management app for teams.
