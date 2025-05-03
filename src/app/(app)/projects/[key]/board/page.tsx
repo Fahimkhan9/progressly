@@ -2,9 +2,10 @@
 import BoardColumn from '@/components/BoardColumn'
 import FullPageLoader from '@/components/FullPageLoader'
 import Sidebar from '@/components/Sidebar'
-import { DndContext, DragEndEvent } from '@dnd-kit/core'
+import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core'
 import axios from 'axios'
-import React, {  useEffect, useState } from 'react'
+import React, {  use, useEffect, useState } from 'react'
+import { set } from 'react-hook-form'
 
 type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
 type column = {
@@ -32,8 +33,8 @@ export interface Task {
 }
 
 
-function Page({ params }: { params: { key: string } }) {
-  const { key } = params;
+function Page({ params }:any ) {
+  const { key } = use(params);
 
   const [members, setMembers] = useState([])
   const [ismemberLoading, setIsMemberLoading] = useState(false)
@@ -53,7 +54,7 @@ async  function handleDragEnd(event: DragEndEvent) {
       order: Date.now(),
     }
     setIsUpdatingTask(true)
-    const res=await axios.patch(`/api/projects/tasks/${taskId}`, data)
+    await axios.patch(`/api/projects/tasks/${taskId}`, data)
    
     
     setTasks(() =>
@@ -75,17 +76,18 @@ async  function handleDragEnd(event: DragEndEvent) {
 
     }
   }
-  const loadteammembers = async (team_id: string) => {
+  const loadteammembers = async (projectId: string) => {
     try {
       setIsMemberLoading(true)
     
 
-      if (team_id) {
-        const data = { team_id }
+      if (projectId) {
+        const data = { projectId }
         const res = await axios.post('/api/users/getmembers', data)
 
        
-
+        console.log(res.data);
+        
         setMembers(res.data.response)
         setIsMemberLoading(false)
       }
@@ -108,6 +110,7 @@ async  function handleDragEnd(event: DragEndEvent) {
 
     }
   }
+  
   useEffect(() => {
     loadteammembers(key)
    
@@ -115,7 +118,7 @@ async  function handleDragEnd(event: DragEndEvent) {
   }, [])
 useEffect(()=>{
   loadtasks(key)
-},[tasks])
+},[setTasks])
   return (
     <div className="flex p-5">
       <div className="w-40 flex-none ...">
@@ -124,7 +127,7 @@ useEffect(()=>{
       </div>
   {/* <div> */}
 
-  <DndContext  onDragEnd={handleDragEnd}>
+  <DndContext  onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
         {
           columns.map(column => <BoardColumn
             key={column.id}
@@ -133,6 +136,7 @@ useEffect(()=>{
             members={members}
             isUpdatingTask={isUpdatingTask}
             tasks={tasks.filter((task) => task.status === column.id)}
+            setTasks={setTasks}
           />)
         }
        

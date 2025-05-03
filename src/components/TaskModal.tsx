@@ -9,7 +9,7 @@ type Inputs = {
     assignedTo: string
     status: 'TODO' | 'IN_PROGRESS' | 'DONE'
 }
-function TaskModal({  members, projectId }: { columnId: string, members: any[], projectId: string }) {
+function TaskModal({  members, projectId,setTasks }: { columnId: string, members: any[], projectId: string,setTasks: React.Dispatch<React.SetStateAction<any[]>> }) {
     const {
         register,
         handleSubmit,
@@ -18,7 +18,7 @@ function TaskModal({  members, projectId }: { columnId: string, members: any[], 
     } = useForm<Inputs>()
     
     
-    const onSubmit: SubmitHandler<Inputs> = async (values) => {
+    const addTask: SubmitHandler<Inputs> = async (values) => {
         const data = {
             ...values,
            
@@ -28,8 +28,10 @@ function TaskModal({  members, projectId }: { columnId: string, members: any[], 
       
         
         
-        await axios.post('/api/projects/tasks/create', data)
-       
+        const res=await axios.post('/api/projects/tasks/create', data)
+        console.log(res.data.task);
+        
+       setTasks((prev) => [...prev, res.data.task])
         toast.success('Team created successfully!', {
             position: "top-right",
             autoClose: 5000,
@@ -41,6 +43,10 @@ function TaskModal({  members, projectId }: { columnId: string, members: any[], 
             theme: "colored",
             transition: Slide,
         });
+        const taskmodal=document.getElementById('task_modal') as HTMLDialogElement
+        if (taskmodal) {
+            taskmodal.close()
+        }
 
 
     }
@@ -56,12 +62,12 @@ function TaskModal({  members, projectId }: { columnId: string, members: any[], 
 
                     <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
                         <legend className="fieldset-legend">Add Task</legend>
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <form onSubmit={handleSubmit(addTask)}>
                             <label htmlFor='title' className="label">Name</label>
                             <input id='title' type="text" {...register("title", { required: true })} className="input" placeholder="Name" />
                             {errors.title && <span className='text-red' >{errors.title.message}</span>}
                             <label htmlFor='description' className="label">Description</label>
-                            <textarea id='description'  {...register("description", { required: true })} className="input" placeholder="Description" />
+                            <textarea maxLength={50} id='description'  {...register("description", { required: true })} className="input" placeholder="Description" />
                             {errors.description && <span className='text-red' >{errors.description.message}</span>}
                             <label htmlFor="status" className="label">Select Status</label>
                             <select {...register("status", { required: true })}  id="status" defaultValue='TODO' className="select select-primary">

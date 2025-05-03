@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import React, { useEffect, useState } from 'react'
 
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaTrash } from "react-icons/fa";
 type team = {
     name: string,
     description: string,
@@ -22,7 +22,7 @@ function Page() {
     const [isLoading, setIsLoading] = useState(false)
     const [ismemberLoading, setIsMemberLoading] = useState(false)
     const [members, setMembers] = useState([])
-    const loadteam = async () => {
+     const loadteam = async () => {
 
 
 
@@ -97,6 +97,8 @@ function Page() {
 
 
                                 <th>Details</th>
+                               
+
                             </tr>
                         </thead>
                         <tbody>
@@ -109,7 +111,7 @@ function Page() {
                                         <td>{item.name}</td>
                                         <td>{item.description}</td>
                                         <td className='btn' onClick={() => handleteammodal(item.id)}><FaEye /></td>
-
+                                        
 
                                     </tr>
                                 ))
@@ -121,6 +123,7 @@ function Page() {
                                 user={user}
                                 members={members}
                                 ismemberLoading={ismemberLoading}
+                                setTeams={setTeams}
                             />
                         </tbody>
                     </table>

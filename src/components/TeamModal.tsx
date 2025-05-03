@@ -6,6 +6,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 
 import axios from 'axios';
 import { Slide, toast } from 'react-toastify';
+import { FaTrash } from 'react-icons/fa';
 
 type team = {
   name: string,
@@ -14,7 +15,7 @@ type team = {
   id: string
 }
 
-function TeamModal({ team, user, members, ismemberLoading }:any) {
+function TeamModal({ team, user, members, ismemberLoading,setTeams }:any) {
   type User = {
     id: string;
     firstName: string;
@@ -66,12 +67,23 @@ function TeamModal({ team, user, members, ismemberLoading }:any) {
 
     }
   }
+const showdeletemodal= ()=>{
+ 
+    const deletemodal=document.getElementById('delete_modal') as HTMLDialogElement
+    if(deletemodal){
+      deletemodal.showModal()
+    }
+  
+}
 
   
   return (
     <dialog id="teammodal" className="modal">
       <div className="modal-box w-11/12 max-w-5xl">
+        <div className="flex justify-between items-center">
         <h3 className="font-bold text-lg">{team?.name}</h3>
+        <button className='btn bg-red-500' onClick={()=>showdeletemodal()}><FaTrash/></button>
+        </div>
         <p className="py-4">{team?.description}</p>
 
 
@@ -151,7 +163,10 @@ function TeamModal({ team, user, members, ismemberLoading }:any) {
             </tbody>
           </table>
         </div></>}
-      
+      <DeleteConfirmationModal
+      team_id={team?.id}
+      setTeams={setTeams}
+      />
         <div className="modal-action">
           <form method="dialog">
             {/* if there is a button, it will close the modal */}
@@ -163,4 +178,74 @@ function TeamModal({ team, user, members, ismemberLoading }:any) {
   )
 }
 
+const DeleteConfirmationModal=({team_id,setTeams}:{team_id:string,setTeams:any})=>{
+  const [isDeleting, setIsDeleting] = useState(false)
+  const handleteamdelete=async()=>{
+    try {
+      setIsDeleting(true)
+      const data={team_id}
+      console.log(data);
+      
+      const res=await axios.post('/api/users/deleteteam',data)
+      if(res.data.success){
+        toast.success('Team deleted successfully!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+      });
+      setTeams(prev=>prev.filter(i=>i.id !==team_id))
+      const deletemodal=document.getElementById('delete_modal') as HTMLDialogElement
+      if(deletemodal){
+        deletemodal.close()
+      }
+      const teammodal=document.getElementById('teammodal') as HTMLDialogElement
+      if(teammodal){
+        teammodal.close()
+      }
+      
+      }else{
+        toast.error('Failed to delete team!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Slide,
+      });
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }finally{
+      setIsDeleting(false)
+
+    }
+  }
+  return (
+    <dialog id="delete_modal" className="modal">
+  <div className="modal-box ">
+    <div className='flex flex-col justify-center items-center'>
+    <h3 className="font-bold text-lg">Are you sure to delete this team?</h3>
+    <button disabled={isDeleting} className="btn my-3 bg-red-500 " onClick={()=>handleteamdelete()}>Delete now</button>
+    </div>
+    
+    <div className="modal-action">
+      <form method="dialog">
+        {/* if there is a button in form, it will close the modal */}
+        <button className="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+  )
+}
 export default TeamModal

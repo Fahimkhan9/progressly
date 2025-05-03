@@ -18,14 +18,15 @@ type ColumnProps = {
   members: any[];
   projectId:string
   isUpdatingTask:boolean
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 };
 
-function BoardColumn({ column, tasks,members,projectId,isUpdatingTask }: ColumnProps) {
+function BoardColumn({ column, tasks,members,projectId,isUpdatingTask,setTasks }: ColumnProps) {
   const { setNodeRef } = useDroppable({
     id: column.id,
-    disabled:isUpdatingTask
   });
   const [columnId,setColumnId]=useState('')
+  const [currentTask,setCurrentTask]=useState<Task | null>(null)
   const handleAddTask = (columnId: string) => {
     setColumnId(()=> columnId)
 
@@ -36,7 +37,21 @@ function BoardColumn({ column, tasks,members,projectId,isUpdatingTask }: ColumnP
    }
     
   }
+ const handleButtonPointerDown = (e: React.PointerEvent) => {
+       e.stopPropagation(); // Stop DnD from treating it as drag
+     };
+   const showtaskdetails = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>,id: string) => {
+     e.stopPropagation();
+     console.log('clicked');
+    const res=tasks.find((task) => task.id === id)
+    console.log(res);
+    setCurrentTask(res || null)
+     const modal = document.getElementById('task_details_modal') as HTMLDialogElement;
+     if (modal) {
+       modal.showModal();
+     }
  
+   }
   
   return (
  <>
@@ -49,7 +64,7 @@ function BoardColumn({ column, tasks,members,projectId,isUpdatingTask }: ColumnP
         </div>
         <div className="">
           {tasks.map((task) => {
-            return <BoardCard key={task.id} task={task} />;
+            return <BoardCard key={task.id} task={task} handleButtonPointerDown={handleButtonPointerDown} showtaskdetails={showtaskdetails} currentTask={currentTask} setTasks={setTasks}  />;
           })}
         </div>
       </div>
@@ -58,6 +73,7 @@ function BoardColumn({ column, tasks,members,projectId,isUpdatingTask }: ColumnP
     columnId={columnId}
     members={members}
     projectId={projectId}
+    setTasks={setTasks}
     />
  </>
   )

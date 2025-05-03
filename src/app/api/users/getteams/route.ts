@@ -60,11 +60,11 @@ export async function GET(req: NextRequest) {
 
         const allTeams = Array.from(teamsMap.values());
       
+        const noownedteam=ownedTeams.length === 0
         
         
         
-        
-        return NextResponse.json({ owned: ownedTeams, member: memberTeams, teams: allTeams })
+        return NextResponse.json({ owned: ownedTeams, member: memberTeams, teams: allTeams,noownedteam })
     } catch (error: any) {
         return NextResponse.json({ msg: error.message }, { status: 500 })
     }

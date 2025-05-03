@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
    }
 
-  const { id } = params;
+  const { id } =await  params;
   const updateData = await req.json();
 
   if (!id) {
@@ -78,7 +78,7 @@ export async function GET(req:NextRequest, { params }: { params: { id: string } 
       }
     
       
-      const { id} = params; 
+      const { id} = await params; 
 
       if (!id) {
         return NextResponse.json({ message: 'Missing projectId' }, { status: 400 });

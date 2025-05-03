@@ -6,6 +6,8 @@ import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
 
 import React, { useEffect, useState } from 'react'
+import { set } from 'react-hook-form'
+import { Slide, toast } from 'react-toastify'
 type team = {
     name: string,
     description: string,
@@ -17,6 +19,7 @@ function ProjectCreatePage() {
     const { user } = useUser()
     const [isLoading, setIsLoading] = useState(false)
     const [teams, setTeams] = useState<team[]>([])
+    const [noownedteam, setNoOwnedTeam] = useState(false)
     const loadteam = async () => {
 
 
@@ -28,7 +31,9 @@ function ProjectCreatePage() {
             const res = await axios.get('/api/users/getteams')
          
             setTeams(res.data.owned)
-
+            console.log(res.data.noownedteam);
+            setNoOwnedTeam(res.data.noownedteam)
+            
 
 
 
@@ -55,7 +60,7 @@ function ProjectCreatePage() {
         <div className="w-60 flex-1 mx-5">
         <div className='flex flex-row min-h-screen justify-center'>
             {
-                isLoading ? <span className="loading loading-bars loading-xl"></span> : <ProjectCreateForm teams={teams} />
+                isLoading ? <span className="loading loading-bars loading-xl"></span> : <ProjectCreateForm teams={teams} noownedteam={noownedteam} />
             }
 
         </div>

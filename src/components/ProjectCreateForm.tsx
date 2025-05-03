@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import Link from 'next/link'
 
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -16,7 +17,7 @@ type team={
   creator_id:string,
   id:string
 }
-function ProjectCreateForm({teams}: { teams: team[] }) {
+function ProjectCreateForm({teams,noownedteam}: { teams: team[],noownedteam:boolean }) {
   
 
   const {
@@ -75,17 +76,22 @@ function ProjectCreateForm({teams}: { teams: team[] }) {
       teams.length>0 && <select {...register("team_id", { required: true })}  className="select">
       
       {
-        teams.map(i=><option value={i.id} >{i.name}</option>)
+        teams.map(i=><option key={i.id} value={i.id} >{i.name}</option>)
       }
     </select>
     }
      <span className="text-red">{
     errors.team_id && errors.team_id.message
     }</span>
-  <button disabled={isSubmitting} type='submit' className="btn text-white bg-[#3D365C] mt-4">Create Project</button>
+  <br />
+  <button disabled={isSubmitting || noownedteam} type='submit' className="btn text-white bg-[#3D365C] mt-4">Create Project</button>
 </form>
 
-
+{noownedteam && <span className='bg-red-600 rounded-lg text-center p-2 text-white text-xl'>You don't have any teams yet!Please create a team.
+  <span className="link">
+    <Link href='/profile/team/create'>Click here to create team</Link>
+  </span>
+  </span>}
 </fieldset>
   )
 }
