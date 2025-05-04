@@ -54,4 +54,3 @@ export const sendEmailToInvitedTeamMember=async (sentemail:string,teamadminname:
  
 }
 
-export const onesignalinit=OneSignal.init({appId:process.env.ONESIGNAL_APP_ID})
