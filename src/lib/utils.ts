@@ -29,7 +29,7 @@ export const sendEmailToInvitedTeamMember=async (sentemail:string,teamadminname:
     console.log(process.env.DOMAIN);
     
     
-    const sentFrom = new Sender("MS_oZ1rnk@test-3m5jgroo130gdpyo.mlsender.net", teamadminname);
+    const sentFrom = new Sender(process.env.MAILERSEND_EMAIL, teamadminname);
     const recipients = [
       new Recipient(sentemail, sentemail)
     ];
