@@ -7,17 +7,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req:NextRequest) {
     try {
-        const {projectId}=await req.json()
+        const {team_id}=await req.json()
         const clerkclient =await  clerkClient();
-        console.log(projectId);
+        console.log(team_id);
         
-        if (!projectId) {
+        if (!team_id) {
             return NextResponse.json({ message: 'Invalid projectId' }, { status: 400 });
           }
-          const pq=doc(projectCollection,projectId)
-          const projectSnap = await getDoc(pq);
-          const projectData = projectSnap.exists() ? projectSnap.data() : [];
-          const team_id = projectData?.team_id
+        
         const q=query(teammemberCollection,where('team_id','==',team_id))
         const teammembersnap=await getDocs(q)
         const memberdata=teammembersnap.docs.map(doc => doc.data());
@@ -43,7 +40,7 @@ export async function POST(req:NextRequest) {
         
         
         
-        return NextResponse.json({response:members,projectData},{status:200})
+        return NextResponse.json({response:members},{status:200})
     } catch (error:any) {
         return NextResponse.json({msg:error.message},{status:500})
     }

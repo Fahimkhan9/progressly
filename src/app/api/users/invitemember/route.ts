@@ -1,16 +1,18 @@
 import { invitationCollection } from "@/lib/firebase";
-import { generateJwtToken } from "@/lib/utils";
+import { generateJwtToken, sendEmailToInvitedTeamMember } from "@/lib/utils";
 import { doc, setDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
+import { send } from "process";
 
 
 export async function POST(req:NextRequest) {
     try {
-        const { email, userid, teamid,role } = await req.json();
+        const { email, userid, teamid,role,teamname,teamadminname } = await req.json();
         const token=generateJwtToken({email,userid})
-        if([email,userid,teamid,token,role].some(i=>i.trim()=='')){
+        if([email,userid,teamid,token,role,teamname,teamadminname].some(i=>i.trim()=='')){
             return NextResponse.json({msg:'All fields are required'})
         }
+        await sendEmailToInvitedTeamMember(email,teamadminname,teamname,token)
        const docref= await setDoc(doc(invitationCollection),{
             invited_user_email :email,
             sent_by_user_id :userid,

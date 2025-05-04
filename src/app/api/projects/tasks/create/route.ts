@@ -1,8 +1,8 @@
 
-import {  taskCollection } from "@/lib/firebase";
+import {  notificationCollection, taskCollection } from "@/lib/firebase";
 
 import { clerkClient, getAuth } from "@clerk/nextjs/server";
-import { addDoc, } from "firebase/firestore";
+import { addDoc, serverTimestamp, } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -32,6 +32,20 @@ export async function POST(req:NextRequest) {
         createdAt: new Date().toDateString(),
         order: Date.now(), // simple sort by timestamp
       })
+      await addDoc(notificationCollection,{
+        userId: assignedTo,
+        title: 'New Task Assigned',
+        message: `You have been assigned: ${title}`,
+        read: false,
+        createdAt: serverTimestamp(),
+        taskId: taskRef.id,
+      })
+    await sendNotificationToUser({
+        userId: assignedTo,
+        title: 'New Task Assigned',
+        message: `You have been assigned: ${title}`,
+      });
+    
       const task={
         projectId,
         title,
@@ -49,4 +63,29 @@ export async function POST(req:NextRequest) {
     } catch (error:any) {
         return NextResponse.json({msg:error.message},{status:500})
     }
+}
+async function sendNotificationToUser({
+  userId,
+  title,
+  message,
+}: {
+  userId: string;
+  title: string;
+  message: string;
+}) {
+  const response = await fetch('https://onesignal.com/api/v1/notifications', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${process.env.ONESIGNAL_API_KEY}`,
+    },
+    body: JSON.stringify({
+      app_id: process.env.ONESIGNAL_APP_ID,
+      headings: { en: title },
+      contents: { en: message },
+      include_external_user_ids: [userId], // Clerk user ID (you must map this in OneSignal setup)
+    }),
+  });
+
+  return await response.json();
 }

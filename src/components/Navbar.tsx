@@ -4,15 +4,23 @@ import { useAuth, useUser } from '@clerk/nextjs'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import React, {  useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { Slide, toast } from 'react-toastify';
 import logo from '../assets/logo.png'
+import OneSignal from 'react-onesignal';
+import NotificationDropdown from './NotificationDropdown';
 function Navbar() {
   const [logoutloading,setLogoutLoading]=useState(false)
   const {isSignedIn,isLoaded,user}=useUser()
   const {signOut}=useAuth()
 
-  
+  useEffect(() => {
+    OneSignal.init({ appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID }).then(() => {
+      
+      OneSignal.Slidedown.promptPush();
+      // do other stuff
+    });
+  }, []);
   const get=()=>{
     if(!isLoaded){
       return<span className="loading loading-dots loading-md"></span>
@@ -30,7 +38,7 @@ function Navbar() {
       try {
         setLogoutLoading(true)
         await signOut()
-        toast.success('🦄 Wow so easy!', {
+        toast.success('Logged out', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -50,6 +58,8 @@ function Navbar() {
       }
     }
     return (
+<div className="">
+  <NotificationDropdown userId={user.id} />
 <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
@@ -75,6 +85,7 @@ function Navbar() {
       </ul>
      
     </div>
+</div>
     )
   }
   return (
@@ -85,7 +96,7 @@ function Navbar() {
       </button></Link>
   </div>
   <div className="flex gap-2 align-center">
-    <h3>{user?.emailAddresses[0].emailAddress}</h3>
+    
     {get()}
   </div>
 </div>

@@ -53,7 +53,7 @@ function Page() {
 
             if (team_id) {
                 const data = { team_id }
-                const res = await axios.post('/api/users/getmembers', data)
+                const res = await axios.post('/api/users/getmembersofteam', data)
 
 
 
@@ -72,6 +72,8 @@ function Page() {
 
 
         setSelectedTeam(() => selectteam[0])
+        console.log(selectteam[0]);
+        
         loadteammembers(selectteam[0].id)
         const modal = document.getElementById('teammodal') as HTMLDialogElement;
         if (modal) {

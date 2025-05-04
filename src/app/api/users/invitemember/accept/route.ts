@@ -17,25 +17,25 @@ export async function POST(req: NextRequest) {
    
 
     if (!userId) {
-      return NextResponse.json({ msg: 'UNAUTHORIZED' }, { status: 401 })
+      return NextResponse.json({ msg: 'UNAUTHORIZED',success:false  }, { status: 401 })
     }
 
     const q = query(invitationCollection, where('token', '==', token), limit(1))
     const invitationSnap = await getDocs(q)
 
     if (invitationSnap.empty) {
-      return NextResponse.json({ msg: 'Invalid invitation token' }, { status: 400 })
+      return NextResponse.json({ msg: 'Invalid invitation token',success:false  }, { status: 400 })
     }
     const invitationDoc = invitationSnap.docs[0];
     const invitation = invitationDoc.data();
     if (invitation.status !== 'pending') {
-      return NextResponse.json({ msg: 'Invitation already used or expired' }, { status: 400 });
+      return NextResponse.json({ msg: 'Invitation already used or expired',success:false  }, { status: 400 });
     }
     if (invitation.expiresAt < new Date().toISOString()) {
-      return NextResponse.json({ msg: 'Invitation has expired' }, { status: 400 });
+      return NextResponse.json({ msg: 'Invitation has expired',success:false  }, { status: 400 });
     }
     if (invitation.invited_user_email !== userEmail) {
-      return NextResponse.json({ msg: 'This invitation was not sent to you' }, { status: 403 });
+      return NextResponse.json({ msg: 'This invitation was not sent to you',success:false  }, { status: 403 });
     }
 
     await setDoc(doc(teammemberCollection), {
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     })
     await setDoc(invitationDoc.ref, { ...invitation, status: 'accepted' }, { merge: true })
 
-    return NextResponse.json({ msg: 'Joined team successfully' }, { status: 200 });
+    return NextResponse.json({ msg: 'Joined team successfully',success:true }, { status: 200 });
 
 
   } catch (error: any) {

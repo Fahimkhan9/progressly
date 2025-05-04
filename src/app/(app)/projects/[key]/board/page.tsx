@@ -137,7 +137,7 @@ useEffect(()=>{
   loadtasks(key)
 },[setTasks])
   return (
-    <div className="flex p-5">
+    <div className="flex p-5 min-h-screen">
       <div className="w-40 flex-none ...">
         <Sidebar id={key} />
             {(isUpdatingTask || isLoadingTask )&& <FullPageLoader/>}

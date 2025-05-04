@@ -29,7 +29,7 @@ function BoardCard({ task,handleButtonPointerDown,showtaskdetails,currentTask,se
     <>
       <div ref={setNodeRef}
         {...listeners}
-        {...attributes} style={style} className="card bg-base-100 w-full m-5 shadow-sm">
+        {...attributes} style={style} className="card bg-base-100 w-auto m-5 shadow-sm">
         <div className="card-body">
           <div className="flex justify-between">
             <h2 className="card-title">

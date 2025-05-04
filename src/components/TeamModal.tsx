@@ -38,12 +38,17 @@ function TeamModal({ team, user, members, ismemberLoading,setTeams }:any) {
           email:item.email,
           userid: user.id,
           teamid: team.id,
-          role
+          role,
+          teamname:team.name,
+          teamadminname:`${user.firstName} ${user.lastName}`
         }
        
 
          await axios.post('/api/users/invitemember', data)
-    
+        const teammodal = document.getElementById('teammodal') as HTMLDialogElement
+        if (teammodal) {
+          teammodal.close()
+        }
         toast.success('Invitation sent successfully!', {
                     position: "top-right",
                     autoClose: 5000,
