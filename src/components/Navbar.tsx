@@ -9,17 +9,26 @@ import { Slide, toast } from 'react-toastify';
 import logo from '../assets/logo.png'
 import OneSignal from 'react-onesignal';
 import NotificationDropdown from './NotificationDropdown';
+import { onesignalinit } from '@/lib/utils';
 function Navbar() {
   const [logoutloading,setLogoutLoading]=useState(false)
   const {isSignedIn,isLoaded,user}=useUser()
   const {signOut}=useAuth()
 
   useEffect(() => {
-    OneSignal.init({ appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID }).then(() => {
-      
-      OneSignal.Slidedown.promptPush();
-      // do other stuff
-    });
+    async function init() {
+      await OneSignal.init({
+        appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!,
+        notifyButton: {
+          enable: true, // shows the bell button
+        },
+      });
+
+      // Optional: identify the user (must match what you send from backend)
+      OneSignal.setExternalUserId(user?.id); // Replace with actual user ID
+    }
+
+    init();
   }, []);
   const get=()=>{
     if(!isLoaded){

@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import jwt from 'jsonwebtoken'
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
-
+import OneSignal from 'react-onesignal';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -53,3 +53,5 @@ export const sendEmailToInvitedTeamMember=async (sentemail:string,teamadminname:
   }
  
 }
+
+export const onesignalinit=OneSignal.init({appId:process.env.ONESIGNAL_APP_ID})
