@@ -7,7 +7,7 @@ import axios from 'axios'
 
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { set } from 'react-hook-form'
+
 import { CiMenuKebab } from 'react-icons/ci'
 import { Slide, toast } from 'react-toastify'
 

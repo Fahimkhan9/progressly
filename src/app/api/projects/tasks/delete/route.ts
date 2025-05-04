@@ -1,4 +1,4 @@
-import { projectCollection, taskCollection, teamCollection } from "@/lib/firebase";
+import {  taskCollection } from "@/lib/firebase";
 import { doc, deleteDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -1,4 +1,4 @@
-import {  invitationCollection, teamCollection, teammemberCollection } from "@/lib/firebase";
+import {  invitationCollection, teammemberCollection } from "@/lib/firebase";
 
 import { currentUser, getAuth } from "@clerk/nextjs/server";
 import {  doc, getDocs, limit, query, setDoc, where } from "firebase/firestore";

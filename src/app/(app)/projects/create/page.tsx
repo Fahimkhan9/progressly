@@ -6,8 +6,7 @@ import { useUser } from '@clerk/nextjs'
 import axios from 'axios'
 
 import React, { useEffect, useState } from 'react'
-import { set } from 'react-hook-form'
-import { Slide, toast } from 'react-toastify'
+
 type team = {
     name: string,
     description: string,
@@ -16,7 +15,7 @@ type team = {
 }
 
 function ProjectCreatePage() {
-    const { user } = useUser()
+    
     const [isLoading, setIsLoading] = useState(false)
     const [teams, setTeams] = useState<team[]>([])
     const [noownedteam, setNoOwnedTeam] = useState(false)

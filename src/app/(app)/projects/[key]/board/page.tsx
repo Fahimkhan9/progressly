@@ -5,7 +5,7 @@ import Sidebar from '@/components/Sidebar'
 import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core'
 import axios from 'axios'
 import React, {  use, useEffect, useState } from 'react'
-import { set } from 'react-hook-form'
+
 import { Slide, toast } from 'react-toastify'
 
 type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
@@ -35,7 +35,7 @@ export interface Task {
 
 
 function Page({ params }:any ) {
-  const { key } = use(params);
+  const { key } = use(params) as { key: string };
 
   const [members, setMembers] = useState([])
   const [ismemberLoading, setIsMemberLoading] = useState(false)

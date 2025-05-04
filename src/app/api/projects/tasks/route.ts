@@ -5,7 +5,7 @@ import {  getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 
-export async function GET(req:NextRequest, { params }: { params: { projectId: string } }) {
+export async function GET(req:NextRequest, { params }: any) {
     try {
        const {userId}=await getAuth(req)
        if (!userId) {

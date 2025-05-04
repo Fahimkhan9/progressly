@@ -2,10 +2,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-function Page({params}: { params: { token: string } }) {
+function Page({params}:any) {
   const [isLoading, setIsLoading] =useState(false)
   const [invitationSuccess,setInvitationSuccess]=useState(false)
-  const [err,setErr]=useState('')
+  
   useEffect(()=>{
     (async ()=>{
       setIsLoading(true)

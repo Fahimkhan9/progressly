@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Bell } from 'lucide-react';
 import {  query, where, orderBy, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 import {  notificationCollection } from '@/lib/firebase';
-import { log } from 'node:console';
+
 import { FaTrash } from 'react-icons/fa';
 import { Slide, toast } from 'react-toastify';
 

@@ -1,7 +1,7 @@
-import { invitationCollection, projectCollection, teamCollection, teammemberCollection } from "@/lib/firebase";
-import { generateJwtToken } from "@/lib/utils";
+import {  projectCollection, teammemberCollection } from "@/lib/firebase";
+
 import { getAuth } from "@clerk/nextjs/server";
-import { doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore";
+import {  getDocs, orderBy, query, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 

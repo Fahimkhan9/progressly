@@ -9,7 +9,7 @@ import { Slide, toast } from 'react-toastify';
 import logo from '../assets/logo.png'
 import OneSignal from 'react-onesignal';
 import NotificationDropdown from './NotificationDropdown';
-import { onesignalinit } from '@/lib/utils';
+
 function Navbar() {
   const [logoutloading,setLogoutLoading]=useState(false)
   const {isSignedIn,isLoaded,user}=useUser()

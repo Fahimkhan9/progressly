@@ -1,6 +1,6 @@
 import { Task } from '@/app/(app)/projects/[key]/board/page';
 import { useDraggable } from '@dnd-kit/core';
-import React, { useState } from 'react'
+import React from 'react'
 import { CiMenuKebab } from 'react-icons/ci';
 import TaskDetailsModal from './TaskDetailsModal';
 

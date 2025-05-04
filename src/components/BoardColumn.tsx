@@ -11,7 +11,7 @@ type column = {
   title: string
 }
 
-type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE';
+
 type ColumnProps = {
   column: column;
   tasks: Task[];

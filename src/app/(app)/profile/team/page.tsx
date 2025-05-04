@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import React, { useEffect, useState } from 'react'
 
-import { FaEye, FaTrash } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 type team = {
     name: string,
     description: string,

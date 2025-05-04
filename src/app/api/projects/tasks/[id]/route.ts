@@ -3,7 +3,7 @@ import { getAuth } from "@clerk/nextjs/server";
 import { projectCollection, taskCollection, teammemberCollection } from '@/lib/firebase';
 import { doc, getDoc, getDocs, query, where, updateDoc, orderBy } from 'firebase/firestore';
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: any) {
     const {userId}=await getAuth(req)
     if (!userId) {
      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -70,7 +70,7 @@ const memberSnap = await getDocs(mq);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
-export async function GET(req:NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req:NextRequest, { params }:any) {
     try {
        const {userId}=await getAuth(req)
        if (!userId) {

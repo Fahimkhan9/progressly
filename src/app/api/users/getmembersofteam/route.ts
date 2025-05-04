@@ -1,7 +1,7 @@
-import {  projectCollection, teamCollection, teammemberCollection } from "@/lib/firebase";
+import {   teammemberCollection } from "@/lib/firebase";
 
 import { clerkClient } from "@clerk/nextjs/server";
-import {  doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import {   getDocs, query, where } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
 

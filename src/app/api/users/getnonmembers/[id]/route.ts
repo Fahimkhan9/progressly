@@ -4,7 +4,7 @@ import {  teammemberCollection } from '@/lib/firebase'; // Your Firestore config
 import {  getDocs, query, where } from 'firebase/firestore';
 
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: any) {
   try {
      const {userId}=await getAuth(req)
     if (!userId) {

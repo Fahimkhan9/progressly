@@ -2,7 +2,7 @@ import { invitationCollection } from "@/lib/firebase";
 import { generateJwtToken, sendEmailToInvitedTeamMember } from "@/lib/utils";
 import { doc, setDoc } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
-import { send } from "process";
+
 
 
 export async function POST(req:NextRequest) {
