@@ -61,10 +61,7 @@ function TeamModal({ team, user, members, ismemberLoading,setTeams }:any) {
                     transition: Slide,
                 });
 
-      } else {
-        console.log('provide email');
-        alert('provide email')
-      }
+      } 
 
 
     } catch (error) {
@@ -189,7 +186,7 @@ const DeleteConfirmationModal=({team_id,setTeams}:{team_id:string,setTeams:any})
     try {
       setIsDeleting(true)
       const data={team_id}
-      console.log(data);
+    
       
       const res=await axios.post('/api/users/deleteteam',data)
       if(res.data.success){

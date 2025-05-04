@@ -9,7 +9,7 @@ export async function POST(req:NextRequest) {
     try {
         const {team_id}=await req.json()
         const clerkclient =await  clerkClient();
-        console.log(team_id);
+      
         
         if (!team_id) {
             return NextResponse.json({ message: 'Invalid projectId' }, { status: 400 });
@@ -22,7 +22,6 @@ export async function POST(req:NextRequest) {
            
             return m.user_id
         });
-        console.log(userIds);
         
         const users = await clerkclient.users.getUserList({userId:userIds});
         const members = users.data.map(user => {

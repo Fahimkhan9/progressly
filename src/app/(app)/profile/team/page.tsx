@@ -72,7 +72,7 @@ function Page() {
 
 
         setSelectedTeam(() => selectteam[0])
-        console.log(selectteam[0]);
+        
         
         loadteammembers(selectteam[0].id)
         const modal = document.getElementById('teammodal') as HTMLDialogElement;

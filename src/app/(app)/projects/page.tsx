@@ -94,7 +94,7 @@ const ProjectDeleteConfirmation=({id,setProjects}:any)=>{
     try {
       setIsDeleting(true)
       const data={id}
-      console.log(data);
+ 
       
       const res=await axios.post('/api/projects/delete',data)
       if(res.data.success){

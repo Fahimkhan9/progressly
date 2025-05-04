@@ -29,7 +29,7 @@ function TaskModal({  members, projectId,setTasks }: { columnId: string, members
         
         
         const res=await axios.post('/api/projects/tasks/create', data)
-        console.log(res.data.task);
+       
         
        setTasks((prev) => [...prev, res.data.task])
         toast.success('Team created successfully!', {

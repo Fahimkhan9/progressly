@@ -17,7 +17,7 @@ function TaskDetailsModal({currentTask,setTasks}:any) {
         id:currentTask.id,
 
       }
-      console.log(data);
+      
       
       await axios.post('/api/projects/tasks/delete',data)
       setTasks((prevTasks: Task[]) => prevTasks.filter((task: Task) => task.id !== currentTask.id));

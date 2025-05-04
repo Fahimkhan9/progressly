@@ -42,9 +42,9 @@ function BoardColumn({ column, tasks,members,projectId,isUpdatingTask,setTasks }
      };
    const showtaskdetails = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>,id: string) => {
      e.stopPropagation();
-     console.log('clicked');
+
     const res=tasks.find((task) => task.id === id)
-    console.log(res);
+    
     setCurrentTask(res || null)
      const modal = document.getElementById('task_details_modal') as HTMLDialogElement;
      if (modal) {

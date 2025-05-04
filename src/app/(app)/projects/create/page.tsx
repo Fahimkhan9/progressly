@@ -31,7 +31,7 @@ function ProjectCreatePage() {
             const res = await axios.get('/api/users/getteams')
          
             setTeams(res.data.owned)
-            console.log(res.data.noownedteam);
+          
             setNoOwnedTeam(res.data.noownedteam)
             
 

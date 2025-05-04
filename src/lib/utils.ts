@@ -25,8 +25,7 @@ export const sendEmailToInvitedTeamMember=async (sentemail:string,teamadminname:
     const mailerSend = new MailerSend({
       apiKey: process.env.MAILER_SEND_API_KEY,
     });
-    console.log(process.env.MAILER_SEND_API_KEY);
-    console.log(process.env.DOMAIN);
+    
     
     
     const sentFrom = new Sender(process.env.MAILERSEND_EMAIL, teamadminname);
@@ -47,9 +46,6 @@ export const sendEmailToInvitedTeamMember=async (sentemail:string,teamadminname:
       .setText(`Dear ${sentemail}, You have been invited to join the team ${teamname}. To accept the invitation, please click the link below: ${process.env.DOMAIN}/profile/team/accept/${token}`)
     
     await mailerSend.email.send(emailParams);
-  }else{
-    console.log('not found domain and mailsend api key');
-    
   }
  
 }

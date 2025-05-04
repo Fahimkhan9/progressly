@@ -33,7 +33,7 @@ export default function NotificationDropdown({ userId }: { userId: string }) {
         id: doc.id,
         ...doc.data(),
       })) as Notification[];
-      console.log('notifications', data);
+     
       setNotifications(data);
     });
 

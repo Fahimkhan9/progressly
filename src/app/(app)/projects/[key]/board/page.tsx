@@ -88,7 +88,7 @@ async  function handleDragEnd(event: DragEndEvent) {
         const res = await axios.post('/api/users/getmembers', data)
 
        
-        console.log(res.data);
+        
         
         setMembers(res.data.response)
         setIsMemberLoading(false)
