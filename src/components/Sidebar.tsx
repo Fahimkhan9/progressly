@@ -1,29 +1,26 @@
-import Link from "next/link";
+'use client'
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
+export default function Sidebar({ id }: { id: string }) {
+  const pathname = usePathname()
 
-export default function Sidebar({id}:{id:string}) {
-    return (
-        <div className="flex">
-           
-            <div className="drawer lg:drawer-open">
+  const links = [
+    { label: 'Board', href: `/projects/${id}/board` },
+    { label: 'Profile', href: `/profile` },
+  ]
 
-  <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-  <div className="drawer-content flex flex-col items-center justify-center">
-    {/* Page content here */}
-    <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">
-      Open drawer
-    </label>
-  </div>
-  <div className="drawer-side">
-    <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
-    <ul className="menu bg-base-200 text-base-content min-h-full w-40 p-4">
-      {/* Sidebar content here */}
-      <li className="link text-md hover:bg-[#0c0b52] hover:text-white bg-base-200"><Link href={`/projects/${id}/board`} >Board</Link></li>
-      <li className="link text-md hover:bg-[#0c0b52] hover:text-white bg-base-200"><Link href={`/profile`} >Profile</Link></li>
-    
-    </ul>
-  </div>
-</div>
-        </div>
-    )
+  return (
+    <aside className="bg-white shadow-lg w-52 min-h-screen flex flex-col p-4 sticky top-0">
+      <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">Project</h1>
+
+      <nav className="flex flex-col gap-2">
+        {links.map(link => (
+          <Link key={link.href} href={link.href} className={`px-4 py-2 rounded-lg transition-colors font-medium text-gray-700 hover:bg-blue-600 hover:text-white ${pathname === link.href ? 'bg-blue-500 text-white' : ''}`}>
+            {link.label}
+          </Link>
+        ))}
+      </nav>
+    </aside>
+  )
 }

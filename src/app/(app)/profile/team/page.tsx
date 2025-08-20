@@ -1,141 +1,131 @@
 'use client'
-import ProfileSidebar from '@/components/ProfileSidebar'
-import TeamModal from '@/components/TeamModal';
-
-import { useUser } from '@clerk/nextjs';
-import axios from 'axios';
 
 import React, { useEffect, useState } from 'react'
+import ProfileSidebar from '@/components/ProfileSidebar'
+import TeamModal from '@/components/TeamModal'
+import { useUser } from '@clerk/nextjs'
+import axios from 'axios'
+import { FaEye } from 'react-icons/fa'
 
-import { FaEye } from "react-icons/fa";
-type team = {
-    name: string,
-    description: string,
-    creator_id: string,
-    id: string
+type Team = {
+  id: string
+  name: string
+  description: string
+  creator_id: string
+}
+
+type Member = {
+  id: string
+  name: string
+  role: string
 }
 
 function Page() {
-    const { user } = useUser()
-    const [teams, setTeams] = useState<team[]>([])
-    const [selectedTeam, setSelectedTeam] = useState<team>()
-    const [isLoading, setIsLoading] = useState(false)
-    const [ismemberLoading, setIsMemberLoading] = useState(false)
-    const [members, setMembers] = useState([])
-     const loadteam = async () => {
+  const { user } = useUser()
+  const [teams, setTeams] = useState<Team[]>([])
+  const [selectedTeam, setSelectedTeam] = useState<Team | undefined>()
+  const [isLoading, setIsLoading] = useState(false)
+  const [isMemberLoading, setIsMemberLoading] = useState(false)
+  const [members, setMembers] = useState<Member[]>([])
 
-
-
-        try {
-
-            setIsLoading(true)
-            const res = await axios.get('/api/users/getteams')
-
-            setTeams(res.data.teams)
-
-
-
-        } catch (error) {
-            console.log(error);
-            setIsLoading(false)
-        } finally {
-            setIsLoading(false)
-        }
+  // Load all teams
+  const loadTeams = async () => {
+    try {
+      setIsLoading(true)
+      const res = await axios.get('/api/users/getteams')
+      setTeams(res.data.teams)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
     }
+  }
 
-    useEffect(() => {
-        loadteam()
-    }, [])
-    const loadteammembers = async (team_id:string) => {
-        try {
-            setIsMemberLoading(true)
+  // Load team members
+  const loadTeamMembers = async (team_id: string) => {
+    try {
+      setIsMemberLoading(true)
+      if (!team_id) return
 
-
-            if (team_id) {
-                const data = { team_id }
-                const res = await axios.post('/api/users/getmembersofteam', data)
-
-
-
-                setMembers(res.data.response)
-                setIsMemberLoading(false)
-            }
-        } catch (error) {
-            console.log(error);
-            setIsMemberLoading(false)
-        } finally {
-            setIsMemberLoading(false)
-        }
+      const res = await axios.post('/api/users/getmembersofteam', { team_id })
+      setMembers(res.data.response)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsMemberLoading(false)
     }
-    const handleteammodal = (id: string) => {
-        const selectteam = teams.filter(i => i.id === id)
+  }
 
+  // Open team modal
+  const handleTeamModal = (id: string) => {
+    const team = teams.find(i => i.id === id)
+    if (!team) return
 
-        setSelectedTeam(() => selectteam[0])
-        
-        
-        loadteammembers(selectteam[0].id)
-        const modal = document.getElementById('teammodal') as HTMLDialogElement;
-        if (modal) {
-            modal.showModal();
-        }
-    }
-    return (
-        <div className="flex">
-            <div className="w-30 flex-none">
-                <ProfileSidebar />
-            </div>
-            <div className="w-60 flex-1 mx-2">
-                {isLoading && <span className="loading loading-ring loading-xl"></span>}
-                <div className="overflow-x-auto m-10">
+    setSelectedTeam(team)
+    loadTeamMembers(team.id)
 
-                    <table className="table">
-                        {/* head */}
-                        <thead>
-                            <tr>
+    const modal = document.getElementById('teammodal') as HTMLDialogElement
+    if (modal) modal.showModal()
+  }
 
-                                <th>Name</th>
-                                <th>Description</th>
+  useEffect(() => {
+    loadTeams()
+  }, [])
 
+  return (
+    <div className="flex min-h-screen">
+      <div className="w-30 flex-none">
+        <ProfileSidebar />
+      </div>
 
-                                <th>Details</th>
-                               
+      <div className="w-60 flex-1 mx-2">
+        {isLoading && <span className="loading loading-ring loading-xl"></span>}
 
-                            </tr>
-                        </thead>
-                        <tbody>
-
-
-
-                            {
-                                teams.length > 0 && teams.map(item => (
-                                    <tr className="hover:bg-base-300" key={item.id}>
-                                        <td>{item.name}</td>
-                                        <td>{item.description}</td>
-                                        <td className='btn' onClick={() => handleteammodal(item.id)}><FaEye /></td>
-                                        
-
-                                    </tr>
-                                ))
-                            }
-
-
-                            <TeamModal
-                                team={selectedTeam}
-                                user={user}
-                                members={members}
-                                ismemberLoading={ismemberLoading}
-                                setTeams={setTeams}
-                            />
-                        </tbody>
-                    </table>
-
-
-
-                </div>
-            </div>
+        <div className="overflow-x-auto m-10">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teams.length > 0 ? (
+                teams.map(team => (
+                  <tr key={team.id} className="hover:bg-base-300">
+                    <td>{team.name}</td>
+                    <td>{team.description}</td>
+                    <td>
+                      <button className="btn" onClick={() => handleTeamModal(team.id)}>
+                        <FaEye />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} className="text-center">
+                    No teams found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-    )
+      </div>
+
+      {selectedTeam && (
+        <TeamModal
+          team={selectedTeam}
+          user={user}
+          members={members}
+          isMemberLoading={isMemberLoading}
+          setTeams={setTeams}
+        />
+      )}
+    </div>
+  )
 }
 
 export default Page
